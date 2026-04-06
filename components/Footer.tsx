@@ -6,14 +6,14 @@ import Image from "next/image";
 
 const Footer = () => {
   return (
-    <footer className="bg-background border-t border-border mt-auto">
+    <footer className="bg-[#020617] border-t border-white/5 mt-auto">
       <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
         <div className="md:flex md:items-center md:justify-between">
           <div className="flex justify-center md:order-2 space-x-6">
-            <Link href="/" className="text-muted hover:text-primary transition-colors">
+            <Link href="/" className="text-white/60 hover:text-primary transition-colors text-sm">
               Terms & Conditions
             </Link>
-            <Link href="/" className="text-muted hover:text-primary transition-colors">
+            <Link href="/" className="text-white/60 hover:text-primary transition-colors text-sm">
               Privacy Policy
             </Link>
           </div>
@@ -23,9 +23,9 @@ const Footer = () => {
                 alt="Astro Fibre Logo"
                 width={120}
                 height={35}
-                className="h-8 w-auto object-contain brightness-0 dark:invert opacity-70"
+                className="h-8 w-auto object-contain brightness-0 invert opacity-70"
             />
-            <p className="text-center text-sm text-muted">
+            <p className="text-center text-sm text-white/40">
               &copy; {new Date().getFullYear()} Astro Fibre. All rights reserved.
             </p>
           </div>

@@ -23,7 +23,7 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="bg-background border-b border-border py-4 relative z-50">
+    <nav className="bg-[#020617] border-b border-white/5 py-4 relative z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-2 lg:px-4">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
@@ -34,7 +34,7 @@ const Navbar = () => {
                 alt="Astro Fibre Logo"
                 width={150}
                 height={43}
-                className="h-18 w-auto object-contain"
+                className="h-18 w-auto object-contain brightness-0 invert"
                 priority
               />
             </Link>
@@ -49,7 +49,7 @@ const Navbar = () => {
                 className={`text-md font-medium transition-colors hover:text-primary ${
                   pathname === link.href
                     ? "text-primary"
-                    : "text-foreground opacity-80 hover:opacity-100"
+                    : "text-white/80 hover:text-white"
                 }`}
               >
                 {link.name}
@@ -57,7 +57,7 @@ const Navbar = () => {
             ))}
             <Link
               href="/apply-now"
-              className="inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-primary text-primary-foreground font-semibold text-md transition-all hover:bg-primary/90 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+              className="inline-flex items-center justify-center px-6 py-2.5 rounded-full bg-primary text-white font-semibold text-md transition-all hover:bg-primary/90 hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
             >
               Apply Now
             </Link>
@@ -65,7 +65,7 @@ const Navbar = () => {
 
           {/* Mobile Menu Button - Simplistic for now */}
           <div className="md:hidden flex items-center">
-            <button className="text-foreground p-2 focus:outline-none">
+            <button className="text-white p-2 focus:outline-none">
               <svg
                 className="h-6 w-6"
                 fill="none"
