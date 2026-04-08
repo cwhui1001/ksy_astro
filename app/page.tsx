@@ -1,8 +1,69 @@
+"use client";
+
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import PackCarousel from "@/components/PackCarousel";
+import ChannelModal from "@/components/ChannelModal";
 
 export default function Home() {
+  const WHATSAPP_NUMBER = "60162299549";
+  const [modalState, setModalState] = useState({
+    isOpen: false,
+    imageSrc: "",
+    packName: "",
+  });
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [formStep, setFormStep] = useState(1);
+  const [formLoading, setFormLoading] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [formData, setFormData] = useState({
+    hasAccount: "",
+    accountNumber: "",
+    package: "",
+    isCivilServant: "",
+    installationMethod: "",
+    fullName: "",
+    icNumber: "",
+    phone: "",
+    email: "",
+    address: "",
+    remark: "",
+    installationDate: "",
+    installationTime: "",
+  });
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleFormSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (formStep === 1) {
+      setFormStep(2);
+      window.scrollTo({ top: document.getElementById('registration-section')?.offsetTop ? document.getElementById('registration-section')!.offsetTop - 100 : 0, behavior: 'smooth' });
+      return;
+    }
+    setFormLoading(true);
+    // Simulate API call
+    setTimeout(() => {
+      setFormLoading(false);
+      setFormSubmitted(true);
+    }, 2000);
+  };
+
+  const openModal = (packName: string, imageSrc: string) => {
+    setModalState({
+      isOpen: true,
+      imageSrc,
+      packName,
+    });
+  };
+
+  const closeModal = () => {
+    setModalState((prev) => ({ ...prev, isOpen: false }));
+  };
   const packImages = [
     { src: "/images/dia-imamku.webp", alt: "Dia Imamku" },
     { src: "/images/pack-1.png", alt: "Astro Pack 1" },
@@ -19,6 +80,162 @@ export default function Home() {
     { src: "/images/sports-pack-4.png", alt: "Astro Sports 4" },
     { src: "/images/sports-pack-8.png", alt: "Astro Sports 8" },
     { src: "/images/sports-pack-7.png", alt: "Astro Sports 7" },
+  ];
+
+  const epicPackImages = [
+    { src: "/images/epic-pack-9.png", alt: "Astro Epic 9" },
+    { src: "/images/epic-pack-10.png", alt: "Astro Epic 10" },
+    { src: "/images/epic-pack-11.png", alt: "Astro Epic 11" },
+    { src: "/images/epic-pack-12.png", alt: "Astro Epic 12" },
+    { src: "/images/epic-pack-13.png", alt: "Astro Epic 13" },
+  ];
+
+  const allPacks = [
+    {
+      id: "entertainment",
+      name: "Entertainment Pack",
+      description: "Easy to stream Local and international Malay, Chinese, and Indian languages shows",
+      price: "49.99",
+      sstPrice: "53.99",
+      rebateTitle: "20% Off (Civil Servant Rebate)",
+      rebatePrice: "39.99",
+      rebatePeriod: "/24 months",
+      features: [
+        "90+ Astro Channels",
+        "Popular series & movies",
+        "Award-winning TV shows",
+        "Stream on 2 devices"
+      ],
+      icon: "/images/pack-icon.png",
+      featuredImage: "/images/dia-imamku.webp",
+      carouselImages: packImages,
+      hardware: [{ name: "Ulti Box", icon: "/images/ulti-box.webp", width: 45 }],
+      apps: [{ name: "Astro Go", icon: "/images/astro-go.png", width: 28 }],
+      channelListImage: "/images/entertainment-channels.webp",
+      bgColor: "bg-slate-50"
+    },
+    {
+      id: "sports",
+      name: "Sports Pack",
+      description: "Match day, race day, game day, live action every day including Premier League, UFC, NBA, and more",
+      price: "69.99",
+      sstPrice: "75.59",
+      rebateTitle: "Sports Super Sales",
+      rebatePrice: "69.99",
+      rebatePeriod: "+ Free Kids 24 months",
+      features: [
+        "Entertainment + Sport with 115+ Channels",
+        "Premier League, BWF, UFC, and more",
+        "TV Shows + Live Sports",
+        "Stream endless live sports"
+      ],
+      icon: "/images/sports-icon.png",
+      featuredImage: "/images/sports-main.png",
+      carouselImages: sportsPackImages,
+      hardware: [{ name: "Ultra Box", icon: "/images/ulti-box.webp", width: 45 }],
+      apps: [
+        { name: "Astro Go", icon: "/images/astro-go.png", width: 28 },
+        { name: "beIN", icon: "/images/bein-sports.webp", width: 35 }
+      ],
+      channelListImage: "/images/sports-channels.webp",
+      bgColor: "bg-white"
+    },
+    {
+      id: "epic",
+      name: "Epic Pack",
+      description: "The ultimate streaming experience with most impressive TV shows, live sports, and apps.",
+      price: "159.99",
+      sstPrice: "172.79",
+      rebateTitle: "New Year Super Sales",
+      rebatePrice: "20% OFF RM159.99",
+      rebatePeriod: "",
+      features: [
+        "Full Package with 140+ Astro Channels",
+        "Netflix, Disney+ Hotstar, Max, iQIYI, BBC, and beIN Sports",
+        "For Sports & Movies Lover",
+        "Variety, Kids, MAX HBO, news, and documentaries",
+        "Includes Ultra Box",
+        "Stream on up to 4 devices"
+      ],
+      icon: "/images/epic-icon.png",
+      featuredImage: "/images/epic-pack-9.png",
+      carouselImages: epicPackImages,
+      hardware: [{ name: "Ultra Box", icon: "/images/ulti-box.webp", width: 45 }],
+      apps: [
+        { name: "Netflix", icon: "/images/netflix.png", width: 30 },
+        { name: "Disney+ Hotstar", icon: "/images/disney-hotstar.webp", width: 30 },
+        { name: "Max", icon: "/images/max.webp", width: 30 },
+        { name: "iQIYI", icon: "/images/iqiyi.webp", width: 30 },
+        { name: "BBC", icon: "/images/bbc.webp", width: 30 },
+        { name: "beIN Sports", icon: "/images/beinsports-circular.webp", width: 30 },
+        { name: "Prime Video", icon: "/images/prime-video.webp", width: 30 },
+        { name: "Sun NXT", icon: "/images/sun-nxt.webp", width: 30 }
+      ],
+      channelListImage: "/images/epic-channels.webp",
+      bgColor: "bg-slate-50"
+    }
+  ];
+
+  const benefitHardwareImages = [
+    { src: "/images/benefit-devices.png", alt: "Astro Devices" },
+    { src: "/images/ultra-box-new.png", alt: "Ultra Box" },
+    { src: "/images/ultra-box-controller.png", alt: "Ultra Box Controller" },
+  ];
+
+  const benefits = [
+    {
+      title: "Video On Demand",
+      description: "Stream up to 90,000 videos on demand",
+      icon: "/images/benefit-vod.png"
+    },
+    {
+      title: "Cloud Recording",
+      description: "Store up to 200 hours of your favourite shows and movies",
+      icon: "/images/benefit-recording.png"
+    },
+    {
+      title: "Play From Start & Live Pause",
+      description: "Never miss a show again",
+      icon: "/images/benefit-play.png"
+    },
+    {
+      title: "Made for you",
+      description: "Personalise your Astro with Multi-User Profiles",
+      icon: "/images/benefit-madeforyou.png"
+    },
+    {
+      title: "4K UHD",
+      description: "Enjoy a crystal-clear viewing experience with Ultra Box",
+      icon: "/images/benefit-4kuhd.png"
+    },
+    {
+      title: "Apps you love",
+      description: "Explore and stream your apps on the Ulti/Ultra Box",
+      icon: "/images/benefit-apps.png"
+    }
+  ];
+
+  const faqs = [
+    {
+      question: "Why choose Astro One?",
+      answer: "Our customers deserve the best streaming entertainment experience with us and the new Astro One Packs make that possible. From just RM49.99, these new packs make it easy, flexible and accessible for all Malaysians to stream the content they love on one platform, with up-to 4 concurrencies on Astro GO. Customers can easily make changes to their subscriptions via the My Astro app, including updates to their packs, choosing from over 11 streaming apps, or switching to different ones, as and when they like."
+    },
+    {
+      question: "How do i subscribe to Astro One?",
+      answer: `Simply fill out the form will do. We will contact you to verify your details and process your application. Prefer to talk to us directly? You can contact us on <a href="https://wa.me/${WHATSAPP_NUMBER}" class="text-primary font-bold hover:underline">WhatsApp</a> instead.`
+    },
+    {
+      question: "Do I need to pay for the Ultra/Ulti Box to subscribe to Astro One packs?",
+      answer: "No. The Ultra/Ulti Box is provided for free. It’s recommended to access apps, add-ons, and On Demand content."
+    },
+    {
+      question: "How many concurrent stream will i get with Astro GO on the new packs?",
+      answer: "You can enjoy up to 2 concurrent streams on Astro GO with the Entertainment and Sports Packs, and up to 4 concurrencies with the Epic Pack."
+    },
+    {
+      question: "Will Astro streaming be affected by bad weather or rain?",
+      answer: "Not at all! Your streaming experience will be smooth and uninterrupted. Since you can opt for connection through Fibre WiFi, it is not affected by weather conditions like rain or storms."
+    }
   ];
 
   return (
@@ -87,9 +304,17 @@ export default function Home() {
               </div>
 
               <div className="pt-1 flex flex-col sm:flex-row items-center gap-8">
-                <Link
-                  href="https://wa.me/60162299549?text=Hi,%20I'm%20interested%20to%20sign%20up%20for%20Astro!"
-                  className="group relative w-full sm:w-auto inline-flex items-center justify-center px-10 py-5 text-xl font-bold text-white bg-[#25D366] rounded-2xl hover:bg-[#128C7E] transition-all duration-300 shadow-lg hover:shadow-[#25D366]/30 hover:-translate-y-1 overflow-hidden"
+                <button
+                  onClick={() => {
+                    setFormData(prev => ({ 
+                      ...prev, 
+                      isCivilServant: "Yes", 
+                      package: "Astro One Entertainment + Civil Servant Rebate",
+                      installationMethod: "Plug & Play (FREE)" 
+                    }));
+                    document.getElementById('registration-section')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="group relative w-full sm:w-auto inline-flex items-center justify-center px-10 py-5 text-xl font-bold text-white bg-[#25D366] rounded-2xl hover:bg-[#128C7E] transition-all duration-300 shadow-lg hover:shadow-[#25D366]/30 hover:-translate-y-1 overflow-hidden cursor-pointer"
                 >
                   <span className="relative z-10 flex items-center gap-3">
                     <svg className="w-6 h-6 fill-white" viewBox="0 0 24 24">
@@ -98,121 +323,6 @@ export default function Home() {
                     Get it now
                   </span>
                   <div className="absolute inset-0 -translate-x-full group-hover:translate-x-0 bg-linear-to-r from-transparent via-white/20 to-transparent transition-transform duration-500" />
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Astro One TV Packs Section */}
-      <section className="py-20 bg-slate-50 relative overflow-hidden border-t border-zinc-100">
-        <div className="container mx-auto px-4 ">
-          <div className="text-center mb-16 animate-fade-in">
-            <h2 className="text-3xl md:text-5xl font-black text-zinc-900 mb-4 tracking-tight leading-[1.1]">
-              Astro One TV packs. <br className="md:hidden" />
-              <span className="bg-linear-to-r from-primary via-purple-600 to-blue-600 bg-clip-text text-transparent">Made easy for you.</span>
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:items-stretch bg-white rounded-[2.5rem] p-8 md:p-12 shadow-2xl shadow-zinc-200/50 border-4 border-primary overflow-hidden">
-            {/* Left Column: Visuals - Now stretching to match right side */}
-            <div className="lg:col-span-6 flex flex-col gap-6 animate-fade-in min-h-full">
-              <div className="relative flex-1 rounded-3xl overflow-hidden shadow-xl group border-4 border-white min-h-[300px] hidden lg:block">
-                <Image
-                  src="/images/dia-imamku.webp"
-                  alt="Dia Imamku"
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              </div>
-              
-              {/* Custom Auto-sliding Gallery for Pack Previews */}
-              <div className="w-full">
-                <PackCarousel images={packImages} />
-              </div>
-            </div>
-
-            {/* Right Column: Features & Pricing */}
-            <div className="lg:col-span-6 h-full flex flex-col justify-between py-2 space-y-8 animate-fade-in" style={{ animationDelay: '200ms' }}>
-              <div className="flex items-center gap-5">
-                <div className="w-20 h-20 relative flex-shrink-0 p-1 rounded-2xl bg-zinc-50 border border-zinc-100 shadow-sm">
-                  <Image src="/images/pack-icon.png" alt="Icon" fill className="object-contain p-2" />
-                </div>
-                <div>
-                  <h3 className="text-3xl font-black text-zinc-900 leading-tight">
-                    Astro One: <br /> <span className="text-primary">Entertainment Pack</span>
-                  </h3>
-                </div>
-              </div>
-
-              <p className="text-zinc-600 text-lg leading-relaxed font-medium">
-                Easy to stream Local and international Malay, Chinese, and Indian languages shows
-              </p>
-
-              <div className="space-y-4 pt-6 border-t border-zinc-100">
-                <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4">
-                  <span className="text-4xl font-black text-zinc-900 tracking-tighter">RM49.99</span>
-                  <span className="text-zinc-400 font-bold text-sm">(after 8% SST RM53.99)</span>
-                </div>
-
-                <div className="p-6 rounded-3xl bg-linear-to-br from-primary/10 via-primary/5 to-transparent border border-primary/10 relative overflow-hidden group">
-                  <div className="relative z-10">
-                    <p className="text-lg font-bold text-zinc-700 mb-1">20% Off (Civil Servant Rebate)</p>
-                    <p className="text-3xl font-black text-primary tracking-tighter">RM39.99 <span className="text-lg font-bold text-primary/60">/24 months</span></p>
-                  </div>
-                  <div className="absolute top-0 right-0 p-4 opacity-10 rotate-12 transition-transform group-hover:scale-125 group-hover:rotate-0 duration-500">
-                    <svg className="w-16 h-16 text-primary" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8 pt-2">
-                {[
-                  "90+ Astro Channels",
-                  "Popular series & movies",
-                  "Award-winning TV shows",
-                  "Stream on 2 devices"
-                ].map((feature, idx) => (
-                  <div key={idx} className="flex items-center gap-3 text-zinc-700 font-bold">
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-green-500/10 flex items-center justify-center">
-                      <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/></svg>
-                    </div>
-                    {feature}
-                  </div>
-                ))}
-              </div>
-
-              {/* Hardware / APP Icons */}
-              <div className="flex flex-wrap items-center gap-8 py-6 px-6 rounded-2xl bg-zinc-50 border border-zinc-100">
-                <div className="flex items-center gap-3">
-                  <div className="text-xs font-black text-zinc-400 uppercase tracking-widest hidden sm:block">Hardware</div>
-                  <div className="flex items-center gap-2 text-zinc-800 font-bold">
-                    <Image src="/images/ulti-box.webp" alt="Ulti Box" width={45} height={40} className="h-8 w-auto object-contain" />
-                    <span className="text-sm">Ulti Box</span>
-                  </div>
-                </div>
-                <div className="w-px h-8 bg-zinc-200 hidden sm:block" />
-                <div className="flex items-center gap-3">
-                  <div className="text-xs font-black text-zinc-400 uppercase tracking-widest hidden sm:block">Mobile</div>
-                  <div className="flex items-center gap-2 text-zinc-800 font-bold">
-                    <Image src="/images/astro-go.png" alt="Astro Go" width={28} height={40} className="h-8 w-auto object-contain" />
-                    <span className="text-sm">Astro Go</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                <Link
-                  href="https://wa.me/60162299549?text=Hi,%20I'm%20interested%20to%20sign%20up%20for%20Astro!"
-                  className="group relative flex-1 inline-flex items-center justify-center px-10 py-5 text-xl font-bold text-white bg-primary rounded-2xl hover:bg-primary/90 transition-all duration-300 shadow-xl shadow-primary/20 hover:-translate-y-1 active:translate-y-0 overflow-hidden"
-                >
-                  <span className="relative z-10">Sign Up Now</span>
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-0 bg-linear-to-r from-transparent via-white/10 to-transparent transition-transform duration-500" />
-                </Link>
-                <button className="flex-1 px-10 py-5 border-2 border-zinc-200 text-zinc-900 font-bold rounded-2xl hover:bg-zinc-50 transition-all duration-300 hover:border-zinc-300">
-                  Channel List
                 </button>
               </div>
             </div>
@@ -220,116 +330,545 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Astro One Sports Pack Section */}
-      <section className="py-20 bg-white relative overflow-hidden">
+      {/* Mapped Pack Sections */}
+      {allPacks.map((pack, index) => (
+        <section key={pack.id} className={`py-20 ${pack.bgColor} relative overflow-hidden border-t border-zinc-100`}>
+          <div className="container mx-auto px-4">
+            {index === 0 && (
+              <div className="text-center mb-16 animate-fade-in">
+                <h2 className="text-3xl md:text-5xl font-black text-zinc-900 mb-4 tracking-tight leading-[1.1]">
+                  Astro One TV packs. <br className="md:hidden" />
+                  <span className="bg-linear-to-r from-primary via-purple-600 to-blue-600 bg-clip-text text-transparent">Made easy for you.</span>
+                </h2>
+              </div>
+            )}
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:items-stretch bg-white rounded-[2.5rem] p-8 md:p-12 shadow-2xl shadow-zinc-200/50 border-4 border-primary overflow-hidden">
+              {/* Left Column: Visuals */}
+              <div className="lg:col-span-6 flex flex-col gap-6 animate-fade-in min-h-full">
+                <div className="relative flex-1 rounded-3xl overflow-hidden shadow-xl group border-4 border-white min-h-[300px] hidden lg:block">
+                  <Image
+                    src={pack.featuredImage}
+                    alt={pack.name}
+                    fill
+                    className="object-cover transition-transform duration-700 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                </div>
+                
+                <div className="w-full">
+                  <PackCarousel images={pack.carouselImages} />
+                </div>
+              </div>
+
+              {/* Right Column: Features & Pricing */}
+              <div className="lg:col-span-6 h-full flex flex-col justify-between py-2 space-y-8 animate-fade-in" style={{ animationDelay: '200ms' }}>
+                <div className="flex items-center gap-5">
+                  <div className="w-20 h-20 relative flex-shrink-0 p-1 rounded-2xl bg-zinc-50 border border-zinc-100 shadow-sm">
+                    <Image src={pack.icon} alt={pack.name} fill className="object-contain p-2" />
+                  </div>
+                  <div>
+                    <h3 className="text-3xl font-black text-zinc-900 leading-tight">
+                      Astro One: <br /> <span className="text-primary">{pack.name}</span>
+                    </h3>
+                  </div>
+                </div>
+
+                <p className="text-zinc-600 text-lg leading-relaxed font-medium">
+                  {pack.description}
+                </p>
+
+                <div className="space-y-4 pt-6 border-t border-zinc-100">
+                  <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4">
+                    <span className="text-4xl font-black text-zinc-900 tracking-tighter">RM{pack.price}</span>
+                    <span className="text-zinc-400 font-bold text-sm">(after 8% SST RM{pack.sstPrice})</span>
+                  </div>
+
+                  <div className="p-6 rounded-3xl bg-linear-to-br from-primary/10 via-primary/5 to-transparent border border-primary/10 relative overflow-hidden group">
+                    <div className="relative z-10">
+                      <p className="text-lg font-bold text-zinc-700 mb-1">{pack.rebateTitle}</p>
+                      <p className="text-3xl font-black text-primary tracking-tighter">{pack.rebatePrice.startsWith('RM') ? pack.rebatePrice : pack.rebatePrice} <span className="text-lg font-bold text-primary/60">{pack.rebatePeriod}</span></p>
+                    </div>
+                    <div className="absolute top-0 right-0 p-4 opacity-10 rotate-12 transition-transform group-hover:scale-125 group-hover:rotate-0 duration-500">
+                      <svg className="w-16 h-16 text-primary" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8 pt-2">
+                  {pack.features.map((feature, idx) => (
+                    <div key={idx} className={`flex items-center gap-3 text-zinc-700 font-bold ${pack.id === "epic" ? "text-sm" : ""}`}>
+                      <div className={`flex-shrink-0 ${pack.id === "epic" ? "w-5 h-5" : "w-6 h-6"} rounded-full bg-green-500/10 flex items-center justify-center`}>
+                        <svg className={`${pack.id === "epic" ? "w-3.5 h-3.5" : "w-4 h-4"} text-green-600`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/></svg>
+                      </div>
+                      {feature}
+                    </div>
+                  ))}
+                </div>
+
+                {/* Hardware / APP Icons */}
+                <div className="flex flex-wrap items-center gap-4 py-6 px-6 rounded-2xl bg-zinc-50 border border-zinc-100">
+                  <div className="flex items-center gap-3">
+                    <div className="text-xs font-black text-zinc-400 uppercase tracking-widest hidden sm:block">Hardware</div>
+                    <div className="flex items-center gap-2 text-zinc-800 font-bold">
+                      {pack.hardware.map((hw, idx) => (
+                        <React.Fragment key={idx}>
+                          <Image src={hw.icon} alt={hw.name} width={hw.width} height={40} className="h-8 w-auto object-contain" />
+                          <span className="text-sm">{hw.name}</span>
+                        </React.Fragment>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="w-px h-8 bg-zinc-200 hidden sm:block" />
+                  <div className="flex items-center gap-3">
+                    <div className="text-xs font-black text-zinc-400 uppercase tracking-widest hidden sm:block">Apps</div>
+                    <div className={`flex flex-wrap items-center gap-2 ${pack.id === "epic" ? "max-w-[300px]" : "gap-4"}`}>
+                      {pack.apps.map((app, idx) => (
+                        <Image key={idx} src={app.icon} alt={app.name} width={app.width} height={40} className="h-7 w-auto object-contain" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col sm:flex-row gap-4 pt-2">
+                  <button
+                    onClick={() => {
+                      setFormData(prev => ({ ...prev, package: pack.name.includes("Epic") ? "Astro One Epic" : pack.name.includes("Sports") ? "Astro One Sports" : "Astro One Entertainment" }));
+                      document.getElementById('registration-section')?.scrollIntoView({ behavior: 'smooth' });
+                    }}
+                    className="group relative flex-1 inline-flex items-center justify-center px-10 py-5 text-xl font-bold text-white bg-primary rounded-2xl hover:bg-primary/90 transition-all duration-300 shadow-xl shadow-primary/20 hover:-translate-y-1 active:translate-y-0 overflow-hidden cursor-pointer"
+                  >
+                    <span className="relative z-10">Sign Up Now</span>
+                    <div className="absolute inset-0 -translate-x-full group-hover:translate-x-0 bg-linear-to-r from-transparent via-white/10 to-transparent transition-transform duration-500" />
+                  </button>
+                  <button 
+                    onClick={() => openModal(pack.name, pack.channelListImage)}
+                    className="flex-1 px-10 py-5 border-2 border-zinc-200 text-zinc-900 font-bold rounded-2xl hover:bg-zinc-50 transition-all duration-300 hover:border-zinc-300"
+                  >
+                    Channel List
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      ))}
+
+      <ChannelModal 
+        isOpen={modalState.isOpen}
+        onClose={closeModal}
+        imageSrc={modalState.imageSrc}
+        packName={modalState.packName}
+      />
+
+      {/* Benefits Section */}
+      <section className="py-20 bg-white relative overflow-hidden border-t border-zinc-100 shadow-2xl">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:items-stretch bg-white rounded-[2.5rem] p-8 md:p-12 shadow-2xl shadow-zinc-200/50 border-4 border-primary overflow-hidden">
-            {/* Left Column: Visuals */}
-            <div className="lg:col-span-6 flex flex-col gap-6 animate-fade-in min-h-full">
-              <div className="relative flex-1 rounded-3xl overflow-hidden shadow-xl group border-4 border-white min-h-[300px] hidden lg:block">
-                <Image
-                  src="/images/sports-main.png"
-                  alt="Astro Sports Main"
-                  fill
-                  className="object-cover transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              </div>
-              
-              <div className="w-full">
-                <PackCarousel images={sportsPackImages} />
-              </div>
+          <div className="flex flex-col lg:flex-row items-center gap-16">
+            {/* Left Column: Device Carousel */}
+            <div className="lg:w-1/2 w-full animate-fade-in">
+                <PackCarousel images={benefitHardwareImages} itemsVisibleDesktop={1} objectFit="contain" />
             </div>
 
-            {/* Right Column: Features & Pricing */}
-            <div className="lg:col-span-6 h-full flex flex-col justify-between py-2 space-y-8 animate-fade-in" style={{ animationDelay: '200ms' }}>
-              <div className="flex items-center gap-5">
-                <div className="w-20 h-20 relative flex-shrink-0 p-1 rounded-2xl bg-zinc-50 border border-zinc-100 shadow-sm">
-                  <Image src="/images/sports-icon.png" alt="Sports Icon" fill className="object-contain p-2" />
-                </div>
-                <div>
-                  <h3 className="text-3xl font-black text-zinc-900 leading-tight">
-                    Astro One: <br /> <span className="text-primary">Sports Pack</span>
-                  </h3>
-                </div>
+            {/* Right Column: Benefits Grid */}
+            <div className="lg:w-1/2 w-full space-y-12 animate-fade-in" style={{ animationDelay: '200ms' }}>
+              <div className="space-y-4">
+                <h2 className="text-4xl md:text-4xl font-black text-zinc-900 leading-tight">
+                  Benefits of 
+                  <span className="text-primary"> Ultibox & Ultrabox</span>
+                </h2>
+                <div className="h-1 w-85 right-10 absolute bg-primary rounded-full" />
               </div>
 
-              <p className="text-zinc-600 text-lg leading-relaxed font-medium">
-                Match day, race day, game day, live action every day including Premier League, UFC, NBA, and more
-              </p>
-
-              <div className="space-y-4 pt-6 border-t border-zinc-100">
-                <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4">
-                  <span className="text-4xl font-black text-zinc-900 tracking-tighter">RM69.99</span>
-                  <span className="text-zinc-400 font-bold text-sm">(after 8% SST RM75.59)</span>
-                </div>
-
-                <div className="p-6 rounded-3xl bg-linear-to-br from-primary/10 via-primary/5 to-transparent border border-primary/10 relative overflow-hidden group">
-                  <div className="relative z-10">
-                    <p className="text-lg font-bold text-zinc-700 mb-1">Sports Super Sales</p>
-                    <p className="text-3xl font-black text-primary tracking-tighter">RM69.99 <span className="text-lg font-bold text-primary/60">+ Free Kids 24 months</span></p>
-                  </div>
-                  <div className="absolute top-0 right-0 p-4 opacity-10 rotate-12 transition-transform group-hover:scale-125 group-hover:rotate-0 duration-500">
-                    <svg className="w-16 h-16 text-primary" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8 pt-2">
-                {[
-                  "Entertainment + Sport with 115+ Channels",
-                  "Premier League, BWF, UFC, and more",
-                  "TV Shows + Live Sports",
-                  "Stream endless live sports"
-                ].map((feature, idx) => (
-                  <div key={idx} className="flex items-center gap-3 text-zinc-700 font-bold">
-                    <div className="flex-shrink-0 w-6 h-6 rounded-full bg-green-500/10 flex items-center justify-center">
-                      <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/></svg>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {benefits.map((benefit, idx) => (
+                  <div key={idx} className="group flex items-start gap-3 p-6 rounded-3xl bg-zinc-50 border border-transparent hover:border-primary/20 hover:bg-white hover:shadow-xl transition-all duration-300">
+                    <div className="relative w-16 h-16 flex-shrink-0">
+                      <Image 
+                        src={benefit.icon} 
+                        alt={benefit.title} 
+                        fill 
+                        className="object-contain transition-transform duration-500 group-hover:scale-110" 
+                      />
                     </div>
-                    {feature}
+                    <div className="space-y-2">
+                      <h3 className="text-xl font-bold text-zinc-900 group-hover:text-primary transition-colors">
+                        {benefit.title}
+                      </h3>
+                      <p className="text-zinc-600 leading-relaxed text-sm font-medium">
+                        {benefit.description}
+                      </p>
+                    </div>
                   </div>
                 ))}
               </div>
-
-              {/* Hardware / APP Icons */}
-              <div className="flex flex-wrap items-center gap-4 py-6 px-6 rounded-2xl bg-zinc-50 border border-zinc-100">
-                <div className="flex items-center gap-3">
-                  <div className="text-xs font-black text-zinc-400 uppercase tracking-widest hidden sm:block">Hardware</div>
-                  <div className="flex items-center gap-2 text-zinc-800 font-bold">
-                    <Image src="/images/ulti-box.webp" alt="Ultra Box" width={45} height={40} className="h-8 w-auto object-contain" />
-                    <span className="text-sm">Ultra Box</span>
-                  </div>
-                </div>
-                <div className="w-px h-8 bg-zinc-200 hidden sm:block" />
-                <div className="flex items-center gap-3">
-                  <div className="text-xs font-black text-zinc-400 uppercase tracking-widest hidden sm:block">Apps</div>
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-2 text-zinc-800 font-bold">
-                      <Image src="/images/astro-go.png" alt="Astro Go" width={28} height={40} className="h-8 w-auto object-contain" />
-                      <span className="text-sm">Astro Go</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-zinc-800 font-bold">
-                      <Image src="/images/bein-sports.webp" alt="beIN SPORTS" width={35} height={40} className="h-8 w-auto object-contain" />
-                      <span className="text-sm">beIN</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-4 pt-2">
-                <Link
-                  href="https://wa.me/60162299549?text=Hi,%20I'm%20interested%20to%20sign%20up%20for%20Astro!"
-                  className="group relative flex-1 inline-flex items-center justify-center px-10 py-5 text-xl font-bold text-white bg-primary rounded-2xl hover:bg-primary/90 transition-all duration-300 shadow-xl shadow-primary/20 hover:-translate-y-1 active:translate-y-0 overflow-hidden"
-                >
-                  <span className="relative z-10">Sign Up Now</span>
-                  <div className="absolute inset-0 -translate-x-full group-hover:translate-x-0 bg-linear-to-r from-transparent via-white/10 to-transparent transition-transform duration-500" />
-                </Link>
-                <button className="flex-1 px-10 py-5 border-2 border-zinc-200 text-zinc-900 font-bold rounded-2xl hover:bg-zinc-50 transition-all duration-300 hover:border-zinc-300">
-                  Channel List
-                </button>
-              </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-24 bg-zinc-50 relative overflow-hidden border-t border-zinc-100 shadow-[inset_0_20px_40px_rgba(0,0,0,0.02)]">
+        <div className="container mx-auto px-4 max-w-4xl relative z-10">
+          <div className="text-center mb-16 space-y-4 animate-fade-in">
+            <h2 className="text-3xl md:text-5xl font-black text-zinc-900 tracking-tight leading-tight">
+              Frequently Asked <span className="text-primary">Questions</span>
+            </h2>
+            <p className="text-zinc-600 text-lg font-medium max-w-2xl mx-auto">Your questions, answered. We've got you covered.</p>
+          </div>
+
+          <div className="space-y-4">
+            {faqs.map((faq, idx) => (
+              <div 
+                key={idx} 
+                className={`group bg-white rounded-[2rem] border transition-all duration-300 overflow-hidden ${openFaq === idx ? 'border-primary/20 shadow-xl shadow-primary/5 ring-1 ring-primary/5' : 'border-zinc-100 shadow-sm hover:border-zinc-200 hover:shadow-md'}`}
+              >
+                <button 
+                  onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
+                  className="w-full flex items-center justify-between p-6 md:p-8 text-left"
+                >
+                  <span className={`text-lg md:text-xl font-bold transition-colors duration-300 ${openFaq === idx ? 'text-primary' : 'text-zinc-800'}`}>
+                    {faq.question}
+                  </span>
+                  <div className={`flex-shrink-0 w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-500 ${openFaq === idx ? 'bg-primary text-white rotate-180' : 'bg-zinc-50 text-zinc-400 group-hover:bg-primary/10 group-hover:text-primary'}`}>
+                    <svg className="w-5 h-5 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      {openFaq === idx ? (
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M18 12H6" />
+                      ) : (
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M12 6v12m6-6H6" />
+                      )}
+                    </svg>
+                  </div>
+                </button>
+                
+                <div 
+                  className={`transition-all duration-500 ease-in-out ${openFaq === idx ? 'max-h-[500px] pb-8 opacity-100' : 'max-h-0 opacity-0'}`}
+                >
+                  <div className="px-6 md:px-8 text-zinc-600 leading-relaxed font-medium">
+                    <div 
+                      className="prose prose-zinc max-w-none"
+                      dangerouslySetInnerHTML={{ __html: faq.answer }} 
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Decorative elements */}
+        <div className="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 right-0 translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl pointer-events-none" />
+      </section>
+
+      {/* Registration Section */}
+      <section id="registration-section" className="py-24 bg-white relative overflow-hidden">
+        <div className="container mx-auto px-4 max-w-5xl relative z-10">
+          <div className="text-center mb-16 space-y-4 animate-fade-in">
+            <h2 className="text-3xl md:text-5xl font-black text-zinc-900 tracking-tight leading-tight">
+              Choose Your Favourite <span className="text-primary">Astro One</span> Today!
+            </h2>
+            <p className="text-zinc-600 text-lg font-medium max-w-2xl mx-auto">
+              Fill in the form to explore and select the Astro One (Channels) package that suits your lifestyle best.
+            </p>
+          </div>
+
+          {!formSubmitted ? (
+            <div className="bg-white rounded-[2.5rem] border border-zinc-100 shadow-2xl shadow-zinc-200/50 overflow-hidden">
+              {/* Form Header / Progress */}
+              <div className="bg-zinc-50 border-b border-zinc-100 p-8 md:p-12 flex flex-col md:flex-row md:items-center justify-between gap-8">
+                <div className="space-y-2">
+                  <div className="flex items-center gap-3">
+                    <span className="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white text-sm font-bold">
+                      {formStep}
+                    </span>
+                    <h3 className="text-2xl font-bold text-zinc-900">
+                      {formStep === 1 ? "Select Your Package" : "Pick Installation Date & Time"}
+                    </h3>
+                  </div>
+                  <p className="text-zinc-500 font-medium">Step {formStep} of 2</p>
+                </div>
+                
+                <div className="flex gap-2">
+                  <div className={`h-2 w-16 rounded-full transition-all duration-500 ${formStep >= 1 ? 'bg-primary' : 'bg-zinc-200'}`} />
+                  <div className={`h-2 w-16 rounded-full transition-all duration-500 ${formStep >= 2 ? 'bg-primary' : 'bg-zinc-200'}`} />
+                </div>
+              </div>
+
+              <form onSubmit={handleFormSubmit} className="p-8 md:p-12 space-y-10">
+                {formStep === 1 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8">
+                    {/* Step 1 Fields */}
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-zinc-700 ml-1">Do you have an Astro Account?</label>
+                      <select 
+                        name="hasAccount"
+                        value={formData.hasAccount}
+                        onChange={handleInputChange}
+                        className="w-full p-4 rounded-2xl bg-zinc-50 border border-zinc-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-zinc-900"
+                        required
+                      >
+                        <option value="">- Select -</option>
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                      </select>
+                    </div>
+
+                    {formData.hasAccount === "Yes" && (
+                      <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                        <label className="text-sm font-bold text-zinc-700 ml-1">Astro Account Number</label>
+                        <input 
+                          type="text"
+                          name="accountNumber"
+                          placeholder="Enter your account number"
+                          value={formData.accountNumber}
+                          onChange={handleInputChange}
+                          className="w-full p-4 rounded-2xl bg-zinc-50 border border-zinc-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-zinc-900"
+                          required
+                        />
+                      </div>
+                    )}
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-zinc-700 ml-1">Astro One Packages</label>
+                      <select 
+                        name="package"
+                        value={formData.package}
+                        onChange={handleInputChange}
+                        className="w-full p-4 rounded-2xl bg-zinc-50 border border-zinc-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-zinc-900"
+                        required
+                      >
+                        <option value="">- Select -</option>
+                        <option value="Astro One Entertainment">Astro One Entertainment</option>
+                        <option value="Astro One Sports">Astro One Sports</option>
+                        <option value="Astro One Epic">Astro One Epic</option>
+                        <option value="Astro One Entertainment + Civil Servant Rebate">Astro One Entertainment + Civil Servant Rebate</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-zinc-700 ml-1">Are you a Malaysian Civil Servant?</label>
+                      <select 
+                        name="isCivilServant"
+                        value={formData.isCivilServant}
+                        onChange={handleInputChange}
+                        className="w-full p-4 rounded-2xl bg-zinc-50 border border-zinc-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-zinc-900"
+                        required
+                      >
+                        <option value="">- Select -</option>
+                        <option value="No">No</option>
+                        <option value="Yes">Yes</option>
+                      </select>
+                    </div>
+
+                    <div className="space-y-2 md:col-span-2">
+                      <label className="text-sm font-bold text-zinc-700 ml-1">Installation Method</label>
+                      <select 
+                        name="installationMethod"
+                        value={formData.installationMethod}
+                        onChange={handleInputChange}
+                        className="w-full p-4 rounded-2xl bg-zinc-50 border border-zinc-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-zinc-900"
+                        required
+                      >
+                        <option value="">- Select -</option>
+                        <option value="Plug & Play (FREE)">Plug & Play (FREE)</option>
+                        <option value={formData.isCivilServant === "Yes" ? "Standard (RM99)" : "Standard (RM50)"}>
+                          {formData.isCivilServant === "Yes" ? "Standard (RM99)" : "Standard (RM50)"}
+                        </option>
+                      </select>
+                      <p className="text-xs text-zinc-500 italic mt-2 px-1">
+                        {formData.installationMethod === "Plug & Play (FREE)" 
+                          ? '"Please note that the Plug & Play installation method requires an active Wi-Fi connection in your home..."'
+                          : formData.isCivilServant === "Yes" 
+                            ? '"With the Civil Servants Promo, your one-time satellite dish installation is RM99... If you have existing WiFi, you can also opt for free Plug & Play installation."'
+                            : "Standard satellite dish installation."}
+                      </p>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-zinc-700 ml-1">Full Name (as per I/C or Passport)</label>
+                      <input 
+                        type="text"
+                        name="fullName"
+                        placeholder="Your full name"
+                        value={formData.fullName}
+                        onChange={handleInputChange}
+                        className="w-full p-4 rounded-2xl bg-zinc-50 border border-zinc-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-zinc-900"
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-zinc-700 ml-1">I/C or Passport Number</label>
+                      <input 
+                        type="text"
+                        name="icNumber"
+                        placeholder="Your ID number"
+                        value={formData.icNumber}
+                        onChange={handleInputChange}
+                        className="w-full p-4 rounded-2xl bg-zinc-50 border border-zinc-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-zinc-900"
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-zinc-700 ml-1">Phone Number (WhatsApp Active)</label>
+                      <input 
+                        type="tel"
+                        name="phone"
+                        placeholder="e.g. 012-345 6789"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        className="w-full p-4 rounded-2xl bg-zinc-50 border border-zinc-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-zinc-900"
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-zinc-700 ml-1">Email Address</label>
+                      <input 
+                        type="email"
+                        name="email"
+                        placeholder="your@email.com"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className="w-full p-4 rounded-2xl bg-zinc-50 border border-zinc-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-zinc-900"
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2 md:col-span-2">
+                      <label className="text-sm font-bold text-zinc-700 ml-1">Installation Address</label>
+                      <textarea 
+                        name="address"
+                        rows={3}
+                        placeholder="Enter your full installation address"
+                        value={formData.address}
+                        onChange={handleInputChange}
+                        className="w-full p-4 rounded-2xl bg-zinc-50 border border-zinc-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-zinc-900 resize-none"
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2 md:col-span-2">
+                      <label className="text-sm font-bold text-zinc-700 ml-1">Special Remark</label>
+                      <textarea 
+                        name="remark"
+                        rows={2}
+                        placeholder="Optional remarks..."
+                        value={formData.remark}
+                        onChange={handleInputChange}
+                        className="w-full p-4 rounded-2xl bg-zinc-50 border border-zinc-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium resize-none"
+                      />
+                    </div>
+
+                    <div className="md:col-span-2 flex items-start gap-3 p-4 bg-zinc-50 rounded-2xl border border-zinc-100">
+                      <input type="checkbox" required className="mt-1 w-5 h-5 accent-primary" />
+                      <p className="text-xs text-zinc-500 leading-relaxed">
+                        I declare that I have read, understand and agree to the <a href="#" className="text-primary hover:underline">Terms & Conditions</a> and consent to the processing of my personal data in accordance with MGPN.
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-8 animate-in fade-in slide-in-from-right-4 duration-500">
+                    {/* Step 2 Fields */}
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-zinc-700 ml-1">Select Your Installation Date</label>
+                      <input 
+                        type="date"
+                        name="installationDate"
+                        value={formData.installationDate}
+                        onChange={handleInputChange}
+                        className="w-full p-4 rounded-2xl bg-zinc-50 border border-zinc-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-zinc-900"
+                        required
+                      />
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="text-sm font-bold text-zinc-700 ml-1">Select Your Installation Time</label>
+                      <select 
+                        name="installationTime"
+                        value={formData.installationTime}
+                        onChange={handleInputChange}
+                        className="w-full p-4 rounded-2xl bg-zinc-50 border border-zinc-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-zinc-900"
+                        required
+                      >
+                        <option value="">- Select -</option>
+                        <option value="9:30 A.M">9:30 A.M</option>
+                        <option value="12:00 P.M">12:00 P.M</option>
+                        <option value="2:00 P.M">2:00 P.M</option>
+                        <option value="4:00 P.M">4:00 P.M</option>
+                      </select>
+                    </div>
+
+                    {formData.isCivilServant === "Yes" && (
+                      <div className="space-y-2 md:col-span-2 animate-in fade-in zoom-in-95 duration-300">
+                        <label className="text-sm font-bold text-zinc-700 ml-1">Payslip Letterhead (Civil Servant)</label>
+                        <div className="border-2 border-dashed border-zinc-200 rounded-[2rem] p-8 text-center hover:border-primary/30 transition-colors bg-zinc-50/50 group">
+                           <input type="file" className="hidden" id="payslip-upload" accept="image/*,.pdf" />
+                           <label htmlFor="payslip-upload" className="cursor-pointer space-y-3 block">
+                              <div className="w-12 h-12 bg-white rounded-2xl border border-zinc-100 flex items-center justify-center mx-auto shadow-sm group-hover:scale-110 transition-transform">
+                                <svg className="w-6 h-6 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+                                </svg>
+                              </div>
+                              <p className="text-sm font-bold text-zinc-600">Insert Your Files Here</p>
+                              <p className="text-xs text-zinc-400">Please provide only the letterhead section of the payslip.</p>
+                           </label>
+                        </div>
+                      </div>
+                    )}
+
+                    
+                  </div>
+                )}
+
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-6 pt-6 border-t border-zinc-100">
+                  {formStep === 2 && (
+                    <button 
+                      type="button"
+                      onClick={() => setFormStep(1)}
+                      className="px-8 py-4 rounded-2xl font-bold text-zinc-500 hover:text-zinc-800 hover:bg-zinc-100 transition-all"
+                    >
+                      ← Previous
+                    </button>
+                  )}
+                  <button 
+                    type="submit"
+                    disabled={formLoading}
+                    className={`ml-auto w-full sm:w-auto px-10 py-5 rounded-2xl bg-primary text-white font-black text-xl shadow-xl shadow-primary/20 hover:-translate-y-1 active:translate-y-0 transition-all disabled:opacity-50 flex items-center justify-center gap-3`}
+                  >
+                    {formLoading ? (
+                      <>
+                        <div className="w-6 h-6 border-3 border-white/30 border-t-white rounded-full animate-spin" />
+                        <span>Processing...</span>
+                      </>
+                    ) : (
+                      <span>{formStep === 1 ? "Select Installation Date" : "Submit Registration"}</span>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+          ) : (
+            <div className="bg-white rounded-[3rem] border border-zinc-100 shadow-2xl p-16 text-center space-y-8 animate-in zoom-in-95 duration-700">
+               <div className="w-24 h-24 bg-green-500 text-white rounded-full flex items-center justify-center mx-auto animate-bounce">
+                  <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="4" d="M5 13l4 4L19 7" />
+                  </svg>
+               </div>
+               <div className="space-y-3">
+                 <h2 className="text-4xl font-black text-zinc-900">Application Received!</h2>
+                 <p className="text-zinc-600 text-lg font-medium">Thank you for choosing Astro. Our team will contact you shortly to verify your details.</p>
+               </div>
+               <button 
+                 onClick={() => setFormSubmitted(false)}
+                 className="text-primary font-bold hover:underline"
+               >
+                 Submit another application
+               </button>
+            </div>
+          )}
         </div>
       </section>
     </div>

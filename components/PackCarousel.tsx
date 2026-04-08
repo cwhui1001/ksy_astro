@@ -5,20 +5,26 @@ import Image from "next/image";
 
 interface PackCarouselProps {
   images: { src: string; alt: string }[];
+  itemsVisibleDesktop?: number;
+  objectFit?: "cover" | "contain";
 }
 
-const PackCarousel: React.FC<PackCarouselProps> = ({ images }) => {
+const PackCarousel: React.FC<PackCarouselProps> = ({ 
+  images, 
+  itemsVisibleDesktop = 3,
+  objectFit = "cover"
+}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsVisible, setItemsVisible] = useState(3);
 
   useEffect(() => {
     const handleResize = () => {
-      setItemsVisible(window.innerWidth < 1024 ? 1 : 3);
+      setItemsVisible(window.innerWidth < 1024 ? 1 : itemsVisibleDesktop);
     };
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  }, [itemsVisibleDesktop]);
 
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev >= images.length - itemsVisible ? 0 : prev + 1));
@@ -35,8 +41,8 @@ const PackCarousel: React.FC<PackCarouselProps> = ({ images }) => {
 
   return (
     <div className="relative group w-full lg:px-8">
-      {/* Container with overflow-hidden */}
-      <div className="relative overflow-hidden pt-2 pb-8">
+      {/* Container with overflow-hidden - Added padding and negative margins to prevent shadow clipping */}
+      <div className="relative overflow-hidden p-12 -m-12">
         <div 
           className="flex transition-transform duration-700 ease-in-out gap-4"
           style={{ 
@@ -57,15 +63,15 @@ const PackCarousel: React.FC<PackCarouselProps> = ({ images }) => {
                 src={image.src}
                 alt={image.alt}
                 fill
-                className="object-cover"
+                className={objectFit === "cover" ? "object-cover" : "object-contain p-4"}
               />
               <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
           ))}
         </div>
 
-        {/* Pagination Dots - Prominent on mobile as per user screenshot */}
-        <div className="absolute bottom-0 left-0 right-0 flex justify-center gap-2">
+        {/* Pagination Dots - adjusted position for new container padding */}
+        <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-2">
           {images.slice(0, images.length - (itemsVisible - 1)).map((_, index) => (
             <button
               key={index}
