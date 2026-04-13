@@ -7,7 +7,7 @@ import PackCarousel from "@/components/PackCarousel";
 import ChannelModal from "@/components/ChannelModal";
 
 export default function Home() {
-  const WHATSAPP_NUMBER = "60162299549";
+  const WHATSAPP_NUMBER = "60146833321";
   const [modalState, setModalState] = useState({
     isOpen: false,
     imageSrc: "",

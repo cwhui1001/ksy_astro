@@ -28,19 +28,8 @@
   --font-mono: var(--font-geist-mono), ui-monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #020617;
-    --foreground: #f8fafc;
-    --primary: #ff0090;
-    --primary-foreground: #ffffff;
-    --accent: #0f172a;
-    --accent-foreground: #f1f5f9;
-    --muted: #1e293b;
-    --muted-foreground: #94a3b8;
-    --border: #1e293b;
-  }
-}
+
+/* Dark mode disabled */
 
 * {
   box-sizing: border-box;
