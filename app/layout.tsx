@@ -16,8 +16,16 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Astro Packages - Fast & Reliable Home Fibre",
-  description: "Explore the best Astro Fibre packages for your home. Get high-speed internet and entertainment all in one place.",
+  title: "Astro Packages | Authorised Astro Channel & Astro One Reseller",
+  description: "Official Astro authorised reseller providing the latest Astro TV packages, channels, and Astro One plans. Register online for seamless entertainment.",
+  icons: {
+    icon: [
+      { url: "/images/astro-malaysia-holdings-berhad--600.png" },
+      { url: "/images/astro-malaysia-holdings-berhad--600.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: "/images/astro-malaysia-holdings-berhad--600.png",
+    shortcut: "/images/astro-malaysia-holdings-berhad--600.png",
+  },
 };
 
 export default function RootLayout({

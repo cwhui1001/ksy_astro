@@ -18,14 +18,14 @@ const Footer = () => {
             <Link href="/" className="group">
               <Image
                 src="/images/logo.png"
-                alt="Astro Fibre"
+                alt="Astro TV"
                 width={150}
                 height={43}
                 className="h-20 w-auto object-contain transition-transform group-hover:scale-105"
               />
             </Link>
             <p className="text-white/60 text-sm leading-relaxed text-center md:text-left max-w-sm">
-              Your trusted partner for Astro Fibre packages. Get the best internet and entertainment experience today.
+              Your trusted partner for Astro TV packages. Get the best entertainment experience today.
             </p>
           </div>
 
