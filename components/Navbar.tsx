@@ -19,11 +19,6 @@ const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu when route changes
-  useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
-
   const navLinks = [
     { name: "About Us", href: "/about-us" },
     { name: "Astro One (Channels)", href: "/" },
@@ -53,6 +48,7 @@ const Navbar = () => {
               <Link
                 key={link.name}
                 href={link.href}
+                onClick={() => setIsOpen(false)}
                 className={`text-md font-medium transition-colors hover:text-primary ${
                   pathname === link.href
                     ? "text-primary"
@@ -98,6 +94,7 @@ const Navbar = () => {
               <Link
                 key={link.name}
                 href={link.href}
+                onClick={() => setIsOpen(false)}
                 className={`flex items-center justify-between p-4 rounded-2xl transition-all duration-300 font-bold text-lg ${
                   pathname === link.href
                     ? "bg-primary text-white"
@@ -115,6 +112,7 @@ const Navbar = () => {
 
           <Link
             href="/apply-now"
+            onClick={() => setIsOpen(false)}
             className="flex items-center justify-center w-full py-5 rounded-[2rem] bg-primary text-white font-black text-xl uppercase tracking-widest shadow-2xl shadow-primary/20 active:scale-95 transition-transform"
           >
             Apply Now

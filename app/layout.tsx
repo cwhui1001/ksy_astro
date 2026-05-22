@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import Script from "next/script";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFloatingBtn from "@/components/WhatsAppFloatingBtn";
@@ -39,6 +40,43 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground selection:bg-primary selection:text-white">
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=AW-18063176278"
+          strategy="afterInteractive"
+        />
+        <Script id="google-tag" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            gtag('config', 'AW-18063176278');
+
+            // Global click listener to track conversion on all buttons and anchor tags that act as buttons
+            document.addEventListener('click', function(e) {
+              var target = e.target;
+              while (target && target.tagName !== 'BUTTON' && target.tagName !== 'A' && target !== document.body) {
+                target = target.parentElement;
+              }
+              
+              if (target && target !== document.body) {
+                // Trigger conversion for EVERY <button> or specific action-oriented <a> tags
+                var isButton = target.tagName === 'BUTTON';
+                var isActionLink = target.tagName === 'A';
+
+                if (isButton || isActionLink) {
+                  console.log('Conversion triggered for:', target.innerText.trim() || 'Button');
+                  window.gtag('event', 'conversion', {
+                    'send_to': 'AW-18063176278/SLogCKHF3LAcENbkmKVD',
+                    'value': 1.0,
+                    'currency': 'MYR'
+                  });
+                }
+              }
+            }, true);
+          `}
+        </Script>
         <Navbar />
         <main className="flex-1 flex flex-col">
           {children}

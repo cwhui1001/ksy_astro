@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import { triggerConversion } from "@/lib/gtag";
 
 type RegistrationFormData = {
   hasAccount: string;
@@ -142,6 +143,7 @@ export default function RegistrationFormSection({
 
     setFormLoading(true);
     window.setTimeout(() => {
+      triggerConversion();
       setFormSubmitted(true);
       setFormLoading(false);
     }, 250);
