@@ -68,9 +68,10 @@ export default function RootLayout({
                 if (isButton || isActionLink) {
                   console.log('Conversion triggered for:', target.innerText.trim() || 'Button');
                   window.gtag('event', 'conversion', {
-                    'send_to': 'AW-18063176278/SLogCKHF3LAcENbkmKVD',
+                    'send_to': 'AW-18063176278/PHXTCMrk9LEcENbkmKVD',
                     'value': 1.0,
-                    'currency': 'MYR'
+                    'currency': 'MYR',
+                    'transaction_id': ''
                   });
                 }
               }

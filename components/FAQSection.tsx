@@ -5,7 +5,7 @@ import React, { useState } from "react";
 const faqs = [
   {
     question: "Why choose Astro One?",
-    answer: "Our customers deserve the best streaming entertainment experience with us and the new Astro One Packs make that possible. From just RM49.99, these new packs make it easy, flexible and accessible for all Malaysians to stream the content they love on one platform, with up-to 4 concurrencies on Astro GO. Customers can easily make changes to their subscriptions via the My Astro app, including updates to their packs, choosing from over 11 streaming apps, or switching to different ones, as and when they like."
+    answer: "Our customers deserve the best streaming entertainment experience with us and the new Astro One Packs make that possible. From just RM39.99, these new packs make it easy, flexible and accessible for all Malaysians to stream the content they love on one platform, with up-to 4 concurrencies on Astro GO. Customers can easily make changes to their subscriptions via the My Astro app, including updates to their packs, choosing from over 11 streaming apps, or switching to different ones, as and when they like."
   },
   {
     question: "How do i subscribe to Astro One?",

@@ -56,86 +56,91 @@ export default function Home() {
   const allPacks = [
     {
       id: "entertainment",
-      name: "Entertainment Pack",
-      description: "Easy to stream Local and international Malay, Chinese, and Indian languages shows",
+      name: "ENTERTAINMENT PACK",
+      description: "The must-watch local and international content made for everyone in the family",
       price: "49.99",
-      sstPrice: "53.99",
-      rebateTitle: "20% Off (Civil Servant Rebate)",
-      rebatePrice: "39.99",
-      rebatePeriod: "/24 months",
+      sstPrice: "43.19",
+      rebateTitle: "Special Offer 20% Off (Penjawat Awam)",
+      rebatePrice: "RM39.99",
+      rebatePeriod: "(2 Years)",
       features: [
-        "90+ Astro Channels",
-        "Popular series & movies",
-        "Award-winning TV shows",
-        "Stream on 2 devices"
+        "Malay, Chinese & Indian Entertainment",
+        "Local Live Sports",
+        "International Movies & TV Shows",
+        "Korean Entertainment",
+        "News & Lifestyle"
       ],
       icon: "/images/pack-icon.png",
       featuredImage: "/images/dia-imamku.webp",
       carouselImages: packImages,
-      hardware: [{ name: "Ulti Box", icon: "/images/ulti-box.webp", width: 45 }],
+      hardware: [{ name: "FREE ASTRO ULTIBOX", icon: "/images/ulti-box.webp", width: 45 }],
       apps: [{ name: "Astro Go", icon: "/images/astro-go.png", width: 28 }],
-      channelListImage: "/images/entertainment-channels.webp",
-      bgColor: "bg-slate-50"
+      channelListImage: "/images/entertainment-channels.png",
+      bgColor: "bg-slate-50",
+      badge: "Best Value",
+      badgeColor: "bg-[#25D366]"
     },
     {
       id: "sports",
-      name: "Sports Pack",
-      description: "Match day, race day, game day, live action every day including Premier League, UFC, NBA, and more",
+      name: "SPORTS PACK",
+      description: "Witness every major league & live sports events, plus family entertainment",
       price: "69.99",
       sstPrice: "75.59",
-      rebateTitle: "Sports Super Sales",
-      rebatePrice: "69.99",
-      rebatePeriod: "+ Free Kids 24 months",
+      rebateTitle: "Special Offer 20% Off (Penjawat Awam)",
+      rebatePrice: "RM69.99",
+      rebatePeriod: "",
       features: [
-        "Entertainment + Sport with 115+ Channels",
-        "Premier League, BWF, UFC, and more",
-        "TV Shows + Live Sports",
-        "Stream endless live sports"
+        "Includes Everything in Entertainment Pack",
+        "120+ Astro Channels",
+        "Sports + Sports Extra",
+        "Indian Favorites"
       ],
       icon: "/images/sports-icon.png",
       featuredImage: "/images/sports-main.png",
       carouselImages: sportsPackImages,
-      hardware: [{ name: "Ultra Box", icon: "/images/ulti-box.webp", width: 45 }],
+      hardware: [{ name: "FREE ASTRO ULTRABOX", icon: "/images/ulti-box.webp", width: 45 }],
       apps: [
         { name: "Astro Go", icon: "/images/astro-go.png", width: 28 },
+        { name: "Sun NXT", icon: "/images/sun-nxt.webp", width: 30 },
         { name: "beIN", icon: "/images/bein-sports.webp", width: 35 }
       ],
-      channelListImage: "/images/sports-channels.webp",
-      bgColor: "bg-white"
+      channelListImage: "/images/sports-channels.png",
+      bgColor: "bg-white",
+      badge: "Popular Choice",
+      badgeColor: "bg-black"
     },
     {
       id: "epic",
-      name: "Epic Pack",
-      description: "The ultimate streaming experience with most impressive TV shows, live sports, and apps.",
+      name: "EPIC PACK",
+      description: "The ultimate all-in-one entertainment with movies, sports, Netflix and variety of streaming apps",
       price: "159.99",
       sstPrice: "172.79",
-      rebateTitle: "New Year Super Sales",
-      rebatePrice: "20% OFF RM159.99",
+      rebateTitle: "Ramadan Sale Starts Now",
+      rebatePrice: "RM159.99",
       rebatePeriod: "",
       features: [
-        "Full Package with 140+ Astro Channels",
-        "Netflix, Disney+ Hotstar, Max, iQIYI, BBC, and beIN Sports",
-        "For Sports & Movies Lover",
-        "Variety, Kids, MAX HBO, news, and documentaries",
-        "Includes Ultra Box",
-        "Stream on up to 4 devices"
+        "Includes Everything in Entertainment, Sports pack",
+        "150+ Astro Channels",
+        "News & Documentaries",
+        "HBO Max, Netflix Standard, Disney+ Hotstar, Prime Video"
       ],
       icon: "/images/epic-icon.png",
       featuredImage: "/images/epic-pack-9.png",
       carouselImages: epicPackImages,
-      hardware: [{ name: "Ultra Box", icon: "/images/ulti-box.webp", width: 45 }],
+      hardware: [{ name: "FREE ASTRO ULTRABOX", icon: "/images/ulti-box.webp", width: 45 }],
       apps: [
-        { name: "Netflix", icon: "/images/netflix.png", width: 30 },
-        { name: "Disney+ Hotstar", icon: "/images/disney-hotstar.webp", width: 30 },
-        { name: "Max", icon: "/images/max.webp", width: 30 },
-        { name: "iQIYI", icon: "/images/iqiyi.webp", width: 30 },
+        { name: "Astro Go", icon: "/images/astro-go.png", width: 28 },
         { name: "BBC", icon: "/images/bbc.webp", width: 30 },
+        { name: "iQIYI", icon: "/images/iqiyi.webp", width: 30 },
+        { name: "Netflix", icon: "/images/netflix.png", width: 30 },
         { name: "beIN Sports", icon: "/images/beinsports-circular.webp", width: 30 },
-        { name: "Prime Video", icon: "/images/prime-video.webp", width: 30 },
+        { name: "Disney+ Hotstar", icon: "/images/disney-hotstar.webp", width: 30 },
         { name: "Sun NXT", icon: "/images/sun-nxt.webp", width: 30 }
       ],
-      channelListImage: "/images/epic-channels.webp",
-      bgColor: "bg-slate-50"
+      channelListImage: "/images/epic-channels.png",
+      bgColor: "bg-slate-50",
+      badge: "Recommended",
+      badgeColor: "bg-[#E91E63]"
     }
   ];
 
@@ -181,7 +186,7 @@ export default function Home() {
   const faqs = [
     {
       question: "Why choose Astro One?",
-      answer: "Our customers deserve the best streaming entertainment experience with us and the new Astro One Packs make that possible. From just RM49.99, these new packs make it easy, flexible and accessible for all Malaysians to stream the content they love on one platform, with up-to 4 concurrencies on Astro GO. Customers can easily make changes to their subscriptions via the My Astro app, including updates to their packs, choosing from over 11 streaming apps, or switching to different ones, as and when they like."
+      answer: "Our customers deserve the best streaming entertainment experience with us and the new Astro One Packs make that possible. From just RM39.99, these new packs make it easy, flexible and accessible for all Malaysians to stream the content they love on one platform, with up-to 4 concurrencies on Astro GO. Customers can easily make changes to their subscriptions via the My Astro app, including updates to their packs, choosing from over 11 streaming apps, or switching to different ones, as and when they like."
     },
     {
       question: "How do i subscribe to Astro One?",
@@ -271,7 +276,7 @@ export default function Home() {
                   onClick={() => {
                     setRegistrationPreset({
                       isCivilServant: "Yes", 
-                      package: "Astro One Entertainment + Civil Servant Rebate",
+                      package: "Astro One ENTERTAINMENT PACK + Civil Servant Rebate",
                       installationMethod: "Plug & Play (FREE)" 
                     });
                     document.getElementById('registration-section')?.scrollIntoView({ behavior: 'smooth' });
@@ -330,6 +335,13 @@ export default function Home() {
                     <Image src={pack.icon} alt={pack.name} fill className="object-contain p-2" />
                   </div>
                   <div>
+                    <div className="flex items-center gap-3 mb-1">
+                      {pack.badge && (
+                        <span className={`${pack.badgeColor} text-white text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-full shadow-sm`}>
+                          {pack.badge}
+                        </span>
+                      )}
+                    </div>
                     <h3 className="text-3xl font-black text-zinc-900 leading-tight">
                       Astro One: <br /> <span className="text-primary">{pack.name}</span>
                     </h3>
@@ -359,7 +371,7 @@ export default function Home() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-4 gap-x-8 pt-2">
                   {pack.features.map((feature, idx) => (
-                    <div key={idx} className={`flex items-center gap-3 text-zinc-700 font-bold ${pack.id === "epic" ? "text-sm" : ""}`}>
+                    <div key={idx} className={`flex items-center gap-3 text-zinc-700 font-bold ${pack.id === "epic" ? "text-sm" : ""} ${feature.includes("Ramadan Sale") || feature.includes("Special Offer") ? "text-green-600" : ""}`}>
                       <div className={`flex-shrink-0 ${pack.id === "epic" ? "w-5 h-5" : "w-6 h-6"} rounded-full bg-green-500/10 flex items-center justify-center`}>
                         <svg className={`${pack.id === "epic" ? "w-3.5 h-3.5" : "w-4 h-4"} text-green-600`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/></svg>
                       </div>
@@ -396,7 +408,7 @@ export default function Home() {
                   <button
                     onClick={() => {
                       setRegistrationPreset({
-                        package: pack.name.includes("Epic") ? "Astro One Epic" : pack.name.includes("Sports") ? "Astro One Sports" : "Astro One Entertainment",
+                        package: pack.name.includes("EPIC") ? "Astro One EPIC PACK" : pack.name.includes("SPORTS") ? "Astro One SPORTS PACK" : "Astro One ENTERTAINMENT PACK",
                       });
                       document.getElementById('registration-section')?.scrollIntoView({ behavior: 'smooth' });
                     }}

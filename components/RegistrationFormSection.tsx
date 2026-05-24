@@ -226,10 +226,10 @@ export default function RegistrationFormSection({
                       required
                     >
                       <option value="">- Select -</option>
-                      <option value="Astro One Entertainment">Astro One Entertainment</option>
-                      <option value="Astro One Sports">Astro One Sports</option>
-                      <option value="Astro One Epic">Astro One Epic</option>
-                      <option value="Astro One Entertainment + Civil Servant Rebate">Astro One Entertainment + Civil Servant Rebate</option>
+                      <option value="Astro One ENTERTAINMENT PACK">Astro One ENTERTAINMENT PACK</option>
+                      <option value="Astro One SPORTS PACK">Astro One SPORTS PACK</option>
+                      <option value="Astro One EPIC PACK">Astro One EPIC PACK</option>
+                      <option value="Astro One ENTERTAINMENT PACK + Civil Servant Rebate">Astro One ENTERTAINMENT PACK + Civil Servant Rebate</option>
                     </select>
                   </div>
 

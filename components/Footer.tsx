@@ -11,10 +11,10 @@ const Footer = () => {
     <footer className="bg-[#020617] text-white border-t border-white/5 mt-auto">
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto py-16 px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-24">
+        <div className="flex flex-col md:flex-row justify-between items-center md:items-start gap-12 lg:gap-24">
           
           {/* Logo & Info */}
-          <div className="flex flex-col items-center md:items-start space-y-6">
+          <div className="flex flex-col items-center md:items-start space-y-6 flex-1 min-w-[280px]">
             <Link href="/" className="group">
               <Image
                 src="/images/logo.png"
@@ -24,13 +24,19 @@ const Footer = () => {
                 className="h-20 w-auto object-contain transition-transform group-hover:scale-105"
               />
             </Link>
-            <p className="text-white/60 text-sm leading-relaxed text-center md:text-left max-w-sm">
+            <p className="text-white/60 text-sm leading-relaxed text-center md:text-left max-w-md">
               Your trusted partner for Astro TV packages. Get the best entertainment experience today.
             </p>
+            <div className="space-y-1">
+              <p className="text-[12px] font-black text-white/70 uppercase tracking-widest">Disclaimer :</p>
+              <p className="text-[12px] text-white/60 leading-relaxed max-w-md">
+                This website is operated by independent Astro Authorized Retailer and is not the official Astro Malaysia website.
+              </p>
+            </div>
           </div>
 
           {/* Quick Links */}
-          <div className="flex flex-col items-center md:items-start space-y-6">
+          <div className="flex flex-col items-center md:items-start space-y-6 md:pt-8 min-w-[200px]">
             <h3 className="text-lg font-semibold tracking-wide text-white uppercase opacity-90">Quick Links</h3>
             <ul className="space-y-4 text-center md:text-left translate-y-1">
               <li>
@@ -47,7 +53,7 @@ const Footer = () => {
           </div>
 
           {/* Contact */}
-          <div className="flex flex-col items-center md:items-start space-y-6">
+          <div className="flex flex-col items-center md:items-start space-y-6 md:pt-8 min-w-[200px]">
             <h3 className="text-lg font-semibold tracking-wide text-white uppercase opacity-90">Contact</h3>
             <ul className="space-y-4 text-center md:text-left">
               <li>
@@ -72,6 +78,10 @@ const Footer = () => {
       <div className="border-t border-white/5 bg-slate-900/40">
         <div className="max-w-7xl mx-auto py-8 px-6 lg:px-8 text-center space-y-2">
           <p className="text-sm font-medium text-white/60">Astro Packages | Astro Authorised Reseller</p>
+          <p className="text-[11px] font-black text-white/70 uppercase">THE KSY ENTERPRISE 202203059028 (NS0266890-A)</p>
+          <p className="text-[11px] text-white/40 leading-relaxed uppercase">
+            REGISTERED ADDRESS: NO. 22A, JALAN 2/125, DESA PETALING, 57100 KUALA LUMPUR, WILAYAH PERSEKUTUAN
+          </p>
           <p className="text-xs text-white/40">
             Copyright © {currentYear} | All rights reserved. 
           </p>
