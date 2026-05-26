@@ -4,7 +4,30 @@ import React, { useState } from "react";
 import Image from "next/image";
 import PackCarousel from "@/components/PackCarousel";
 import ChannelModal from "@/components/ChannelModal";
+import PackageDetailModal from "@/components/PackageDetailModal";
 import RegistrationFormSection from "@/components/RegistrationFormSection";
+
+interface Pack {
+  id: string;
+  name: string;
+  description: string;
+  price: string;
+  originalPrice?: string;
+  sstPrice: string;
+  rebateTitle: string;
+  rebatePrice: string;
+  rebatePeriod: string;
+  features: string[];
+  icon: string;
+  featuredImage: string;
+  carouselImages: { src: string; alt: string }[];
+  hardware: { name: string; icon: string; width: number }[];
+  apps: { name: string; icon: string; width: number }[];
+  channelListImage: string;
+  bgColor: string;
+  badge?: string;
+  badgeColor?: string;
+}
 
 export default function Home() {
   const WHATSAPP_NUMBER = "60146833321";
@@ -13,7 +36,13 @@ export default function Home() {
     imageSrc: "",
     packName: "",
   });
+  const [detailModalState, setDetailModalState] = useState({
+    isOpen: false,
+    packId: "entertainment",
+  });
   const [openFaq, setOpenFaq] = useState<number | null>(0);
+  const [activeTab, setActiveTab] = useState("netflix");
+  const [sportsSubTab, setSportsSubTab] = useState("Sports");
   const [registrationPreset, setRegistrationPreset] = useState<Record<string, string>>({});
 
   const openModal = (packName: string, imageSrc: string) => {
@@ -26,6 +55,17 @@ export default function Home() {
 
   const closeModal = () => {
     setModalState((prev) => ({ ...prev, isOpen: false }));
+  };
+
+  const openDetailModal = (packId: string) => {
+    setDetailModalState({
+      isOpen: true,
+      packId,
+    });
+  };
+
+  const closeDetailModal = () => {
+    setDetailModalState((prev) => ({ ...prev, isOpen: false }));
   };
   const packImages = [
     { src: "/images/dia-imamku.webp", alt: "Dia Imamku" },
@@ -53,7 +93,7 @@ export default function Home() {
     { src: "/images/epic-pack-13.png", alt: "Astro Epic 13" },
   ];
 
-  const allPacks = [
+  const allPacks: Pack[] = [
     {
       id: "entertainment",
       name: "ENTERTAINMENT PACK",
@@ -85,13 +125,14 @@ export default function Home() {
       name: "SPORTS PACK",
       description: "Witness every major league & live sports events, plus family entertainment",
       price: "69.99",
+      originalPrice: "99.99",
       sstPrice: "75.59",
-      rebateTitle: "Special Offer 20% Off (Penjawat Awam)",
+      rebateTitle: "Special Offer 20% Off",
       rebatePrice: "RM69.99",
       rebatePeriod: "",
       features: [
         "Includes Everything in Entertainment Pack",
-        "120+ Astro Channels",
+        "110+ Astro Channels",
         "Sports + Sports Extra",
         "Indian Favorites"
       ],
@@ -114,13 +155,14 @@ export default function Home() {
       name: "EPIC PACK",
       description: "The ultimate all-in-one entertainment with movies, sports, Netflix and variety of streaming apps",
       price: "159.99",
+      originalPrice: "199.99",
       sstPrice: "172.79",
       rebateTitle: "Ramadan Sale Starts Now",
       rebatePrice: "RM159.99",
       rebatePeriod: "",
       features: [
         "Includes Everything in Entertainment, Sports pack",
-        "150+ Astro Channels",
+        "130+ Astro Channels",
         "News & Documentaries",
         "HBO Max, Netflix Standard, Disney+ Hotstar, Prime Video"
       ],
@@ -297,20 +339,233 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Mapped Pack Sections */}
-      {allPacks.map((pack, index) => (
-        <section key={pack.id} className={`py-20 ${pack.bgColor} relative overflow-hidden border-t border-zinc-100`}>
-          <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
-            {index === 0 && (
-              <div className="text-center mb-16 animate-fade-in">
-                <h2 className="text-3xl md:text-5xl font-black text-zinc-900 mb-4 tracking-tight leading-[1.1]">
-                  Astro One TV packs. <br className="md:hidden" />
-                  <span className="bg-linear-to-r from-primary via-purple-600 to-blue-600 bg-clip-text text-transparent">Made easy for you.</span>
-                </h2>
-              </div>
-            )}
+      {/* Astro One TV Packs & Bundles Section */}
+      <section id="tv-packs" className="py-20 bg-zinc-50 relative overflow-hidden border-t border-zinc-100 shadow-2xl">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col items-center mb-16">
+            <h2 className="text-3xl md:text-5xl font-black text-zinc-900 mb-8 tracking-tight leading-[1.1] text-center italic">
+              Astro One TV packs. <br className="md:hidden" />
+              <span className="bg-linear-to-r from-primary via-purple-600 to-blue-600 bg-clip-text text-transparent">Made easy for you.</span>
+            </h2>
+            
+            <div className="flex gap-8 md:gap-16 border-b border-zinc-200 w-full justify-center">
+              <button
+                onClick={() => setActiveTab("netflix")}
+                className={`pb-4 text-xl md:text-2xl font-bold transition-all relative cursor-pointer ${
+                  activeTab === "netflix" ? "text-primary" : "text-zinc-400 hover:text-zinc-600"
+                }`}
+              >
+                Bundle with Netflix
+                {activeTab === "netflix" && (
+                  <div className="absolute bottom-[-1px] left-0 w-full h-[3px] bg-primary rounded-t-full" />
+                )}
+              </button>
+              <button
+                onClick={() => setActiveTab("standard")}
+                className={`pb-4 text-xl md:text-2xl font-bold transition-all relative cursor-pointer ${
+                  activeTab === "standard" ? "text-primary" : "text-zinc-400 hover:text-zinc-600"
+                }`}
+              >
+                TV Packs Only
+                {activeTab === "standard" && (
+                  <div className="absolute bottom-[-1px] left-0 w-full h-[3px] bg-primary rounded-t-full" />
+                )}
+              </button>
+            </div>
+          </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:items-stretch bg-white rounded-[2.5rem] p-8 md:p-12 shadow-2xl shadow-zinc-200/50 border-4 border-primary overflow-hidden">
+          <div className="animate-fade-in transition-all duration-500">
+            {activeTab === 'netflix' ? (
+              <div className="flex flex-col gap-20">
+            {/* Entertainment + Netflix */}
+            <div className="relative rounded-[3rem] overflow-hidden group min-h-[500px] flex items-center p-8 md:p-12 bg-linear-to-br from-[#CF0071] to-[#8E004E] shadow-2xl">
+              <Image 
+                src="/images/pack-1.png"
+                alt="Entertainment + Netflix"
+                fill
+                className="object-cover transition-transform duration-700 group-hover:scale-103 opacity-30"
+              />
+              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 w-full items-center">
+                <div className="lg:col-span-7 break-words text-white space-y-4">
+                  <h2 className="text-[40px] md:text-[56px] font-[900] leading-tight text-white mb-4">
+                    Astro One, for all entertainment lovers
+                  </h2>
+                  <p className="text-xl md:text-2xl font-bold opacity-90">
+                    Easy to stream on any device for everyone in your family.
+                  </p>
+                </div>
+                
+                <div className="lg:col-span-5 flex flex-col rounded-[2rem] bg-white/70 p-6 backdrop-blur-[30px] lg:p-8 shadow-2xl border border-white/20 transition-transform duration-700 group-hover:scale-105">
+                  <div className="mb-4 flex justify-between gap-4">
+                    <p className="text-2xl font-black text-zinc-900">Entertainment + Netflix</p>
+                    <div className="text-right font-black text-zinc-900">
+                      <p><span className="text-3xl">RM74.90</span><span className="text-sm">/mth</span></p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex w-full flex-row items-center gap-2 mb-8">
+                    <div className="flex-grow">
+                      <span className="flex w-fit items-center gap-2 rounded-sm border border-emerald-200/50 bg-linear-to-r from-[#FFF9D3] to-[#C3F2D7] px-3 py-1 font-black text-[10px] text-[#01BF55] uppercase tracking-widest">
+                        <Image alt="badge-icon" width={16} height={16} src="/images/green_coin.svg" className="min-w-[16px]" />
+                        Best Value
+                      </span>
+                    </div>
+                    <button 
+                      onClick={() => {
+                        setRegistrationPreset({ package: "Astro One Entertainment + Netflix" });
+                        document.getElementById('registration-section')?.scrollIntoView({ behavior: 'smooth' });
+                      }}
+                      className="cursor-pointer bg-linear-to-r from-primary to-purple-600 text-white px-8 py-3 rounded-xl font-black text-sm hover:scale-105 transition-all shadow-lg active:scale-95"
+                    >
+                      Get it now
+                    </button>
+                  </div>
+                  
+                  <ul className="mb-8 space-y-4 h-[112px]">
+                    {[
+                      "Andai Tiada Dia, Gegar Vaganza, MFL, Didi & Friends",
+                      "Popular series, blockbusters, award-winning TV shows, family favourites",
+                      "Stream on up to 2 devices"
+                    ].map((feature, i) => (
+                      <li key={i} className="flex flex-row gap-3 text-sm text-zinc-900 font-bold">
+                        <Image alt="info-icon" width={14} height={14} src="/images/tick.svg" className="mt-1 flex-none self-start" />
+                        <p>{feature}</p>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-auto">
+                    <div className="flex items-center gap-3 mb-4">
+                      <button className="px-4 py-1.5 rounded-lg border border-zinc-200 bg-white/60 text-xs font-black text-zinc-900">Base</button>
+                      <button 
+                        onClick={() => openDetailModal("entertainment")}
+                        className="text-xs font-black text-primary hover:underline"
+                      >
+                        View more
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2 h-[85px]">
+                       <Image alt="big_stage" width={150} height={84} src="/images/big-stage-concert.jpg" className="w-full h-full rounded-xl aspect-video object-cover" />
+                       <Image alt="Fight for Beauty" width={150} height={84} src="/images/fight-for-beauty.jpg" className="w-full h-full rounded-xl aspect-video object-cover" />
+                       <Image alt="mfl" width={150} height={84} src="/images/mfl_1.jpg" className="w-full h-full rounded-xl aspect-video object-cover" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Sports + Netflix */}
+            <div className="relative rounded-[3rem] overflow-hidden group min-h-[500px] flex items-center p-8 md:p-12 bg-linear-to-br from-[#1A237E] to-[#0D47A1] shadow-2xl">
+              <Image 
+                src="/images/sports-main.png"
+                alt="Sports + Netflix"
+                fill
+                className="object-cover object-top transition-transform duration-700 group-hover:scale-103 opacity-40"
+              />
+              <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 w-full items-center">
+                <div className="lg:col-span-7 break-words text-white space-y-4">
+                  <h2 className="text-[40px] md:text-[56px] font-[900] leading-tight text-white mb-4">
+                    Astro One, for the sports fans
+                  </h2>
+                  <p className="text-xl md:text-2xl font-bold opacity-90">
+                    Match day, race day, game day, live action every day.
+                  </p>
+                </div>
+                
+                <div className="lg:col-span-5 flex flex-col rounded-[2rem] bg-white/70 p-6 backdrop-blur-[30px] lg:p-8 shadow-2xl border border-white/20 transition-transform duration-700 group-hover:scale-105">
+                  <div className="mb-4 flex justify-between gap-4">
+                    <p className="text-2xl font-black text-zinc-900">Sports + Netflix</p>
+                    <div className="text-right font-black text-zinc-900">
+                      <p><span className="text-3xl">RM94.90</span><span className="text-sm">/mth</span></p>
+                      <s className="text-sm text-zinc-500 font-bold">RM124.90/mth</s>
+                    </div>
+                  </div>
+                  
+                  <div className="flex w-full flex-row items-center gap-2 mb-8">
+                    <div className="flex-grow">
+                      <span className="flex w-fit items-center gap-2 rounded-sm border border-pink-200/50 bg-linear-to-r from-[#FDCFE8] to-[#D1E3FF] px-3 py-1 font-black text-[10px] text-[#442AD7] uppercase tracking-widest">
+                        <Image alt="badge-icon" width={16} height={16} src="/images/favourite.png" className="min-w-[16px]" />
+                        Popular Choice
+                      </span>
+                    </div>
+                    <button 
+                      onClick={() => {
+                        setRegistrationPreset({ package: "Astro One Sports + Netflix" });
+                        document.getElementById('registration-section')?.scrollIntoView({ behavior: 'smooth' });
+                      }}
+                      className="cursor-pointer bg-linear-to-r from-primary to-blue-600 text-white px-8 py-3 rounded-xl font-black text-sm hover:scale-105 transition-all shadow-lg active:scale-95"
+                    >
+                      Get it now
+                    </button>
+                  </div>
+                  
+                  <ul className="mb-8 space-y-4 h-[112px]">
+                    {[
+                      "Premier League, BWF, UFC, NBA, Formula 1, MotoGP, and more",
+                      "Stream endless live sports",
+                      "Stream on up to 2 devices"
+                    ].map((feature, i) => (
+                      <li key={i} className="flex flex-row gap-3 text-sm text-zinc-900 font-bold">
+                        <Image alt="info-icon" width={14} height={14} src="/images/tick.svg" className="mt-1 flex-none self-start" />
+                        <p>{feature}</p>
+                      </li>
+                    ))}
+                  </ul>
+
+                  <div className="mt-auto">
+                    <div className="flex flex-wrap items-center gap-1 mb-4">
+                      {["Sports", "Sports Extra", "Base"].map((tab) => (
+                        <button
+                          key={tab}
+                          onClick={() => setSportsSubTab(tab)}
+                          className={`px-4 py-2 rounded-lg text-xs font-black transition-all cursor-pointer ${
+                            sportsSubTab === tab 
+                              ? "bg-white/90 border border-zinc-200 text-zinc-900 shadow-sm" 
+                              : "text-primary hover:text-primary/70"
+                          }`}
+                        >
+                          {tab}
+                        </button>
+                      ))}
+                      <button 
+                        onClick={() => openDetailModal("sports")}
+                        className="px-4 py-2 text-xs font-black text-primary hover:underline cursor-pointer"
+                      >
+                        View more
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2 h-[85px]">
+                      {sportsSubTab === "Sports" && (
+                        <>
+                          <Image alt="bwf" width={150} height={84} src="/images/bwf-badminton.jpg" className="w-full h-full rounded-xl aspect-video object-cover animate-in fade-in duration-500" />
+                          <Image alt="pl" width={150} height={84} src="/images/premier-league_1.jpg" className="w-full h-full rounded-xl aspect-video object-cover animate-in fade-in duration-500" />
+                          <Image alt="mfl" width={150} height={84} src="/images/mfl.jpg" className="w-full h-full rounded-xl aspect-video object-cover animate-in fade-in duration-500" />
+                        </>
+                      )}
+                      {sportsSubTab === "Sports Extra" && (
+                        <>
+                          <Image alt="astro_cricket" width={150} height={84} src="/images/astro-cricket.jpg" className="w-full h-full rounded-xl aspect-video object-cover animate-in fade-in duration-500" />
+                          <Image alt="golf" width={150} height={84} src="/images/golf.png" className="w-full h-full rounded-xl aspect-video object-cover animate-in fade-in duration-500" />
+                          <Image alt="rugby_league" width={150} height={84} src="/images/rugby-league.jpg" className="w-full h-full rounded-xl aspect-video object-cover animate-in fade-in duration-500" />
+                        </>
+                      )}
+                      {sportsSubTab === "Base" && (
+                        <>
+                          <Image alt="big_stage" width={150} height={84} src="/images/big-stage-concert.jpg" className="w-full h-full rounded-xl aspect-video object-cover animate-in fade-in duration-500" />
+                          <Image alt="Fight for Beauty" width={150} height={84} src="/images/fight-for-beauty.jpg" className="w-full h-full rounded-xl aspect-video object-cover animate-in fade-in duration-500" />
+                          <Image alt="mfl" width={150} height={84} src="/images/mfl_1.jpg" className="w-full h-full rounded-xl aspect-video object-cover animate-in fade-in duration-500" />
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-20">
+            {allPacks.map((pack) => (
+              <div key={pack.id} className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:items-stretch bg-white rounded-[2.5rem] p-5 md:p-12 shadow-2xl shadow-zinc-200/50 border-4 border-primary overflow-hidden transition-all duration-500 hover:shadow-primary/10">
               {/* Left Column: Visuals */}
               <div className="lg:col-span-6 flex flex-col gap-6 animate-fade-in min-h-full">
                 <div className="relative flex-1 rounded-3xl overflow-hidden shadow-xl group border-4 border-white min-h-[300px] hidden lg:block">
@@ -329,9 +584,9 @@ export default function Home() {
               </div>
 
               {/* Right Column: Features & Pricing */}
-              <div className="lg:col-span-6 h-full flex flex-col justify-between py-2 space-y-8 animate-fade-in" style={{ animationDelay: '200ms' }}>
-                <div className="flex items-center gap-5">
-                  <div className="w-20 h-20 relative flex-shrink-0 p-1 rounded-2xl bg-zinc-50 border border-zinc-100 shadow-sm">
+              <div className="lg:col-span-6 h-full flex flex-col justify-between py-2 space-y-6 md:space-y-8 animate-fade-in" style={{ animationDelay: '200ms' }}>
+                <div className="flex items-center gap-3 md:gap-5">
+                  <div className="w-12 h-12 md:w-20 md:h-20 relative flex-shrink-0 p-1 rounded-2xl bg-zinc-50 border border-zinc-100 shadow-sm">
                     <Image src={pack.icon} alt={pack.name} fill className="object-contain p-2" />
                   </div>
                   <div>
@@ -342,29 +597,52 @@ export default function Home() {
                         </span>
                       )}
                     </div>
-                    <h3 className="text-3xl font-black text-zinc-900 leading-tight">
+                    <h3 className="text-xl md:text-3xl font-black text-zinc-900 leading-tight">
                       Astro One: <br /> <span className="text-primary">{pack.name}</span>
                     </h3>
                   </div>
                 </div>
 
-                <p className="text-zinc-600 text-lg leading-relaxed font-medium">
+                <p className="text-zinc-600 text-sm md:text-lg leading-relaxed font-medium">
                   {pack.description}
                 </p>
 
                 <div className="space-y-4 pt-6 border-t border-zinc-100">
-                  <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4">
-                    <span className="text-4xl font-black text-zinc-900 tracking-tighter">RM{pack.price}</span>
-                    <span className="text-zinc-400 font-bold text-sm">(after 8% SST RM{pack.sstPrice})</span>
-                  </div>
+                  {pack.id === "entertainment" && (
+                    <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-4 mb-2 ml-1">
+                      <span className="text-2xl md:text-4xl font-black text-zinc-900 tracking-tighter">RM{pack.price}</span>
+                      <span className="text-zinc-400 font-bold text-xs md:text-sm">(after 8% SST RM{pack.sstPrice})</span>
+                    </div>
+                  )}
 
-                  <div className="p-6 rounded-3xl bg-linear-to-br from-primary/10 via-primary/5 to-transparent border border-primary/10 relative overflow-hidden group">
+                  <div className="p-4 md:p-6 rounded-3xl bg-linear-to-br from-primary/10 via-primary/5 to-transparent border border-primary/10 relative overflow-hidden group">
                     <div className="relative z-10">
-                      <p className="text-lg font-bold text-zinc-700 mb-1">{pack.rebateTitle}</p>
-                      <p className="text-3xl font-black text-primary tracking-tighter">{pack.rebatePrice.startsWith('RM') ? pack.rebatePrice : pack.rebatePrice} <span className="text-lg font-bold text-primary/60">{pack.rebatePeriod}</span></p>
+                      <p className="text-sm md:text-lg font-bold text-zinc-900 mb-1">{pack.rebateTitle}</p>
+                      
+                      <div className="flex flex-col">
+                        <div className="flex items-baseline">
+                          <span className="text-2xl md:text-4xl font-black text-primary tracking-tighter">
+                            {pack.id === "entertainment" ? pack.rebatePrice : `RM${pack.price}`}
+                          </span>
+                          <span className="text-sm md:text-lg font-bold text-primary/60 ml-1">/mth</span>
+                          {pack.rebatePeriod && (
+                            <span className="text-sm md:text-lg font-bold text-primary/60 ml-2">{pack.rebatePeriod}</span>
+                          )}
+                        </div>
+                        {pack.originalPrice && (
+                          <span className="text-lg text-zinc-400 font-bold line-through ml-0.5 -mt-1 tracking-tight">
+                            RM{pack.originalPrice}/mth
+                          </span>
+                        )}
+                      </div>
+                      {pack.id !== "entertainment" && (
+                        <p className="text-zinc-400 font-bold text-sm mt-3">(after 8% SST RM{pack.sstPrice})</p>
+                      )}
                     </div>
                     <div className="absolute top-0 right-0 p-4 opacity-10 rotate-12 transition-transform group-hover:scale-125 group-hover:rotate-0 duration-500">
-                      <svg className="w-16 h-16 text-primary" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                      <svg className="w-16 h-16 text-primary" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                      </svg>
                     </div>
                   </div>
                 </div>
@@ -381,14 +659,14 @@ export default function Home() {
                 </div>
 
                 {/* Hardware / APP Icons */}
-                <div className="flex flex-wrap items-center gap-4 py-6 px-6 rounded-2xl bg-zinc-50 border border-zinc-100">
+                <div className="flex flex-wrap items-center gap-4 py-4 px-4 md:py-6 md:px-6 rounded-2xl bg-zinc-50 border border-zinc-100">
                   <div className="flex items-center gap-3">
                     <div className="text-xs font-black text-zinc-400 uppercase tracking-widest hidden sm:block">Hardware</div>
                     <div className="flex items-center gap-2 text-zinc-800 font-bold">
                       {pack.hardware.map((hw, idx) => (
                         <React.Fragment key={idx}>
-                          <Image src={hw.icon} alt={hw.name} width={hw.width} height={40} className="h-8 w-auto object-contain" />
-                          <span className="text-sm">{hw.name}</span>
+                          <Image src={hw.icon} alt={hw.name} width={hw.width} height={40} className="h-6 md:h-8 w-auto object-contain" />
+                          <span className="text-xs md:text-sm">{hw.name}</span>
                         </React.Fragment>
                       ))}
                     </div>
@@ -398,13 +676,13 @@ export default function Home() {
                     <div className="text-xs font-black text-zinc-400 uppercase tracking-widest hidden sm:block">Apps</div>
                     <div className={`flex flex-wrap items-center gap-2 ${pack.id === "epic" ? "max-w-[300px]" : "gap-4"}`}>
                       {pack.apps.map((app, idx) => (
-                        <Image key={idx} src={app.icon} alt={app.name} width={app.width} height={40} className="h-7 w-auto object-contain" />
+                        <Image key={idx} src={app.icon} alt={app.name} width={app.width} height={40} className="h-6 md:h-7 w-auto object-contain" />
                       ))}
                     </div>
                   </div>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4 pt-2">
+                <div className="flex flex-col gap-3 md:gap-4 pt-2">
                   <button
                     onClick={() => {
                       setRegistrationPreset({
@@ -412,23 +690,35 @@ export default function Home() {
                       });
                       document.getElementById('registration-section')?.scrollIntoView({ behavior: 'smooth' });
                     }}
-                    className="group relative flex-1 inline-flex items-center justify-center px-10 py-5 text-xl font-bold text-white bg-primary rounded-2xl hover:bg-primary/90 transition-all duration-300 shadow-xl shadow-primary/20 hover:-translate-y-1 active:translate-y-0 overflow-hidden cursor-pointer"
+                    className="group relative w-full inline-flex items-center justify-center px-6 py-5 text-xl md:text-2xl font-black text-white bg-primary rounded-2xl hover:bg-primary/90 transition-all duration-300 shadow-xl shadow-primary/25 hover:-translate-y-1 active:translate-y-0 overflow-hidden cursor-pointer"
                   >
                     <span className="relative z-10">Sign Up Now</span>
                     <div className="absolute inset-0 -translate-x-full group-hover:translate-x-0 bg-linear-to-r from-transparent via-white/10 to-transparent transition-transform duration-500" />
                   </button>
-                  <button 
-                    onClick={() => openModal(pack.name, pack.channelListImage)}
-                    className="flex-1 px-10 py-5 border-2 border-zinc-200 text-zinc-900 font-bold rounded-2xl hover:bg-zinc-50 transition-all duration-300 hover:border-zinc-300"
-                  >
-                    Channel List
-                  </button>
+                  
+                  <div className="flex gap-3 md:gap-4">
+                    <button 
+                      onClick={() => openDetailModal(pack.id)}
+                      className="flex-1 px-4 py-4 md:py-5 border-2 border-zinc-200 text-zinc-900 font-bold rounded-2xl hover:bg-zinc-50 transition-all duration-300 hover:border-zinc-300 cursor-pointer text-sm md:text-base bg-white"
+                    >
+                      View Details
+                    </button>
+                    <button 
+                      onClick={() => openModal(pack.name, pack.channelListImage)}
+                      className="flex-1 px-4 py-4 md:py-5 bg-zinc-900 text-white font-bold rounded-2xl hover:bg-zinc-800 transition-all duration-300 shadow-xl shadow-zinc-900/10 cursor-pointer text-sm md:text-base"
+                    >
+                      Channel List
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
+                ))}
+              </div>
+            )}
           </div>
-        </section>
-      ))}
+        </div>
+      </section>
 
       <ChannelModal 
         isOpen={modalState.isOpen}
@@ -449,11 +739,11 @@ export default function Home() {
             {/* Right Column: Benefits Grid */}
             <div className="lg:w-1/2 w-full space-y-12 animate-fade-in" style={{ animationDelay: '200ms' }}>
               <div className="space-y-4">
-                <h2 className="text-4xl md:text-4xl font-black text-zinc-900 leading-tight">
+                <h2 className="text-3xl md:text-4xl font-black text-zinc-900 leading-tight">
                   Benefits of 
-                  <span className="text-primary"> Ultibox & Ultrabox</span>
+                  <span className="text-primary block sm:inline"> Ultibox & Ultrabox</span>
                 </h2>
-                <div className="h-1 w-85 right-10 absolute bg-primary rounded-full" />
+                <div className="h-1.5 w-24 bg-primary rounded-full" />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -490,7 +780,7 @@ export default function Home() {
             <h2 className="text-3xl md:text-5xl font-black text-zinc-900 tracking-tight leading-tight">
               Frequently Asked <span className="text-primary">Questions</span>
             </h2>
-            <p className="text-zinc-600 text-lg font-medium max-w-2xl mx-auto">Your questions, answered. We've got you covered.</p>
+            <p className="text-zinc-600 text-lg font-medium max-w-2xl mx-auto">Your questions, answered. We&apos;ve got you covered.</p>
           </div>
 
           <div className="space-y-4">
@@ -538,6 +828,12 @@ export default function Home() {
       </section>
 
       <RegistrationFormSection presetData={registrationPreset} />
+
+      <PackageDetailModal 
+        isOpen={detailModalState.isOpen}
+        onClose={closeDetailModal}
+        initialPackId={detailModalState.packId}
+      />
     </div>
   );
 }

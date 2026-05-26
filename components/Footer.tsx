@@ -45,7 +45,15 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/" className="text-white/50 hover:text-primary transition-all duration-200 text-sm hover:translate-x-1 inline-block">
+                <Link 
+                  href="/" 
+                  onClick={() => {
+                    if (window.location.pathname === '/') {
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                  }}
+                  className="text-white/50 hover:text-primary transition-all duration-200 text-sm hover:translate-x-1 inline-block"
+                >
                   Astro One (Channels)
                 </Link>
               </li>

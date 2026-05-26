@@ -230,6 +230,8 @@ export default function RegistrationFormSection({
                       <option value="Astro One SPORTS PACK">Astro One SPORTS PACK</option>
                       <option value="Astro One EPIC PACK">Astro One EPIC PACK</option>
                       <option value="Astro One ENTERTAINMENT PACK + Civil Servant Rebate">Astro One ENTERTAINMENT PACK + Civil Servant Rebate</option>
+                      <option value="Astro One Entertainment + Netflix">Astro One Entertainment + Netflix</option>
+                      <option value="Astro One Sports + Netflix">Astro One Sports + Netflix</option>
                     </select>
                   </div>
 
