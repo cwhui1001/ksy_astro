@@ -66,16 +66,17 @@ function get_email_template(string $title, string $details_html, string $footer_
 HTML;
 }
 
-function send_admin_mail_with_attachment(
+function send_admin_mail_with_attachments(
     string $to,
     string $subject,
     string $body,
     string $replyTo,
-    string $attachmentPath = ''
+    array $attachmentPaths = []
 ): bool {
     $fromHeader = 'From: Astro Registration <admin@astro-registration.my>';
+    $attachmentPaths = array_filter($attachmentPaths, fn($p) => $p !== '' && is_file($p));
 
-    if ($attachmentPath === '' || !is_file($attachmentPath)) {
+    if (empty($attachmentPaths)) {
         $headers = [
             $fromHeader,
             'Reply-To: ' . $replyTo,
@@ -88,29 +89,6 @@ function send_admin_mail_with_attachment(
     }
 
     $boundary = '=_Part_' . bin2hex(random_bytes(12));
-    $fileName = basename($attachmentPath);
-    $fileData = file_get_contents($attachmentPath);
-    if ($fileData === false) {
-        $headers = [
-            $fromHeader,
-            'Reply-To: ' . $replyTo,
-            'MIME-Version: 1.0',
-            'Content-Type: text/html; charset=UTF-8',
-            'Content-Transfer-Encoding: base64',
-        ];
-        $encodedBody = chunk_split(base64_encode($body));
-        return @mail($to, $subject, $encodedBody, implode("\r\n", $headers));
-    }
-
-    $mimeType = 'application/octet-stream';
-    if (function_exists('mime_content_type')) {
-        $detected = mime_content_type($attachmentPath);
-        if ($detected !== false && $detected !== '') {
-            $mimeType = $detected;
-        }
-    }
-
-    $encodedFile = chunk_split(base64_encode($fileData));
     $encodedBody = chunk_split(base64_encode($body));
 
     $message = "This is a multi-part message in MIME format.\r\n\r\n";
@@ -118,11 +96,28 @@ function send_admin_mail_with_attachment(
     $message .= "Content-Type: text/html; charset=UTF-8\r\n";
     $message .= "Content-Transfer-Encoding: base64\r\n\r\n";
     $message .= $encodedBody . "\r\n";
-    $message .= "--{$boundary}\r\n";
-    $message .= "Content-Type: {$mimeType}; name=\"{$fileName}\"\r\n";
-    $message .= "Content-Disposition: attachment; filename=\"{$fileName}\"\r\n";
-    $message .= "Content-Transfer-Encoding: base64\r\n\r\n";
-    $message .= $encodedFile . "\r\n";
+
+    foreach ($attachmentPaths as $path) {
+        $fileName = basename($path);
+        $fileData = file_get_contents($path);
+        if ($fileData === false) continue;
+
+        $mimeType = 'application/octet-stream';
+        if (function_exists('mime_content_type')) {
+            $detected = mime_content_type($path);
+            if ($detected !== false && $detected !== '') {
+                $mimeType = $detected;
+            }
+        }
+
+        $encodedFile = chunk_split(base64_encode($fileData));
+        $message .= "--{$boundary}\r\n";
+        $message .= "Content-Type: {$mimeType}; name=\"{$fileName}\"\r\n";
+        $message .= "Content-Disposition: attachment; filename=\"{$fileName}\"\r\n";
+        $message .= "Content-Transfer-Encoding: base64\r\n\r\n";
+        $message .= $encodedFile . "\r\n";
+    }
+
     $message .= "--{$boundary}--";
 
     $headers = [
@@ -156,6 +151,39 @@ $installationDate = clean_input($_POST['installationDate'] ?? '');
 $installationTime = clean_input($_POST['installationTime'] ?? '');
 $uploadedPayslipPath = '';
 $uploadedPayslipFullPath = '';
+$uploadedIcFrontPath = '';
+$uploadedIcFrontFullPath = '';
+$uploadedIcBackPath = '';
+$uploadedIcBackFullPath = '';
+
+function process_upload(array $file, string $subDir): array
+{
+    if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+        return ['error' => 'File upload failed or was not provided.'];
+    }
+    if (($file['size'] ?? 0) > MAX_UPLOAD_SIZE) {
+        return ['error' => 'File is too large. Maximum allowed is 5MB.'];
+    }
+    $extension = strtolower(pathinfo((string) ($file['name'] ?? ''), PATHINFO_EXTENSION));
+    $allowed = ['pdf', 'jpg', 'jpeg', 'png', 'webp'];
+    if (!in_array($extension, $allowed, true)) {
+        return ['error' => 'Invalid file format. Allowed: PDF, JPG, JPEG, PNG, WEBP.'];
+    }
+    $uploadDir = __DIR__ . '/uploads/' . $subDir;
+    if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755, true) && !is_dir($uploadDir)) {
+        return ['error' => 'Server could not prepare upload folder.'];
+    }
+    $baseName = safe_filename(pathinfo((string) $file['name'], PATHINFO_FILENAME));
+    $finalFileName = $baseName . '-' . date('YmdHis') . '-' . bin2hex(random_bytes(4)) . '.' . $extension;
+    $targetPath = $uploadDir . '/' . $finalFileName;
+    if (!move_uploaded_file((string) $file['tmp_name'], $targetPath)) {
+        return ['error' => 'Unable to save uploaded file.'];
+    }
+    return [
+        'path' => '/uploads/' . $subDir . '/' . $finalFileName,
+        'fullPath' => $targetPath
+    ];
+}
 
 if (
     $hasAccount === '' ||
@@ -176,6 +204,37 @@ if (
     exit;
 }
 
+// Process IC Front
+if (!isset($_FILES['icFrontFile'])) {
+    http_response_code(400);
+    echo 'IC Front upload is required.';
+    exit;
+}
+$icFrontRes = process_upload($_FILES['icFrontFile'], 'ic');
+if (isset($icFrontRes['error'])) {
+    http_response_code(400);
+    echo $icFrontRes['error'];
+    exit;
+}
+$uploadedIcFrontPath = $icFrontRes['path'];
+$uploadedIcFrontFullPath = $icFrontRes['fullPath'];
+
+// Process IC Back
+if (!isset($_FILES['icBackFile'])) {
+    http_response_code(400);
+    echo 'IC Back upload is required.';
+    exit;
+}
+$icBackRes = process_upload($_FILES['icBackFile'], 'ic');
+if (isset($icBackRes['error'])) {
+    http_response_code(400);
+    echo $icBackRes['error'];
+    exit;
+}
+$uploadedIcBackPath = $icBackRes['path'];
+$uploadedIcBackFullPath = $icBackRes['fullPath'];
+
+// Process Payslip (optional based on isCivilServant)
 if ($isCivilServant === 'Yes') {
     if (!isset($_FILES['payslipFile']) || !is_array($_FILES['payslipFile'])) {
         http_response_code(400);
@@ -183,48 +242,14 @@ if ($isCivilServant === 'Yes') {
         exit;
     }
 
-    $file = $_FILES['payslipFile'];
-
-    if (($file['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
+    $payslipRes = process_upload($_FILES['payslipFile'], 'payslips');
+    if (isset($payslipRes['error'])) {
         http_response_code(400);
-        echo 'Payslip file upload failed. Please try again.';
+        echo $payslipRes['error'];
         exit;
     }
-
-    if (($file['size'] ?? 0) > MAX_UPLOAD_SIZE) {
-        http_response_code(400);
-        echo 'Payslip file is too large. Maximum allowed is 5MB.';
-        exit;
-    }
-
-    $extension = strtolower(pathinfo((string) ($file['name'] ?? ''), PATHINFO_EXTENSION));
-    $allowedExtensions = ['pdf', 'jpg', 'jpeg', 'png', 'webp'];
-
-    if (!in_array($extension, $allowedExtensions, true)) {
-        http_response_code(400);
-        echo 'Invalid payslip file format. Allowed: PDF, JPG, JPEG, PNG, WEBP.';
-        exit;
-    }
-
-    $uploadDir = __DIR__ . '/uploads/payslips';
-    if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755, true) && !is_dir($uploadDir)) {
-        http_response_code(500);
-        echo 'Server could not prepare upload folder.';
-        exit;
-    }
-
-    $baseName = safe_filename(pathinfo((string) $file['name'], PATHINFO_FILENAME));
-    $finalFileName = $baseName . '-' . date('YmdHis') . '-' . bin2hex(random_bytes(4)) . '.' . $extension;
-    $targetPath = $uploadDir . '/' . $finalFileName;
-
-    if (!move_uploaded_file((string) $file['tmp_name'], $targetPath)) {
-        http_response_code(500);
-        echo 'Unable to save uploaded payslip file.';
-        exit;
-    }
-
-    $uploadedPayslipPath = '/uploads/payslips/' . $finalFileName;
-    $uploadedPayslipFullPath = $targetPath;
+    $uploadedPayslipPath = $payslipRes['path'];
+    $uploadedPayslipFullPath = $payslipRes['fullPath'];
 }
 
 $submittedAt = date('Y-m-d H:i:s');
@@ -243,13 +268,15 @@ $responses = [
     'Special Remark' => $remark !== '' ? $remark : '-',
     'Installation Date' => $installationDate,
     'Installation Time' => $installationTime,
+    'IC Front Upload' => $uploadedIcFrontPath,
+    'IC Back Upload' => $uploadedIcBackPath,
     'Payslip Upload' => $uploadedPayslipPath !== '' ? $uploadedPayslipPath : '-',
     'Submitted At' => $submittedAt,
 ];
 
 $detailsHtml = '<table class="details-table">';
 foreach ($responses as $label => $value) {
-    if ($label === 'Payslip Upload' && $value !== '-') {
+    if (strpos($label, 'Upload') !== false && $value !== '-') {
          $detailsHtml .= "<tr><th>{$label}</th><td><a href=\"https://astro-registration.my{$value}\" style=\"color: #e91e63; text-decoration: none; font-weight: 600;\">View Attachment</a></td></tr>";
     } else {
          $detailsHtml .= "<tr><th>{$label}</th><td>" . nl2br(htmlspecialchars((string)$value)) . "</td></tr>";
@@ -289,7 +316,13 @@ $userHeaders = [
 
 $encodedUserBody = chunk_split(base64_encode($userBody));
 
-send_admin_mail_with_attachment(ADMIN_EMAIL, $adminSubject, $adminBody, (string)$email, $uploadedPayslipFullPath);
+send_admin_mail_with_attachments(
+    ADMIN_EMAIL,
+    $adminSubject,
+    $adminBody,
+    (string)$email,
+    [$uploadedIcFrontFullPath, $uploadedIcBackFullPath, $uploadedPayslipFullPath]
+);
 @mail($email, $userSubject, $encodedUserBody, implode("\r\n", $userHeaders));
 
 $waLines = [

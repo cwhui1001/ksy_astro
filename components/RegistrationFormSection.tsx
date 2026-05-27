@@ -57,8 +57,12 @@ export default function RegistrationFormSection({
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formData, setFormData] = useState<RegistrationFormData>(initialFormData);
   const [payslipFileName, setPayslipFileName] = useState("");
+  const [icFrontFileName, setIcFrontFileName] = useState("");
+  const [icBackFileName, setIcBackFileName] = useState("");
   const [fileError, setFileError] = useState("");
   const payslipInputRef = useRef<HTMLInputElement>(null);
+  const icFrontInputRef = useRef<HTMLInputElement>(null);
+  const icBackInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!presetData) {
@@ -81,34 +85,56 @@ export default function RegistrationFormSection({
     }
   };
 
-  const handlePayslipChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-
-    if (!file) {
-      setPayslipFileName("");
-      setFileError("");
-      return;
-    }
-
+  const validateFile = (file: File) => {
     const allowed = ["pdf", "jpg", "jpeg", "png", "webp"];
     const ext = file.name.split(".").pop()?.toLowerCase() ?? "";
 
     if (!allowed.includes(ext)) {
-      setFileError("Invalid format. Use PDF, JPG, JPEG, PNG, or WEBP.");
-      setPayslipFileName("");
-      e.target.value = "";
-      return;
+      return "Invalid format. Use PDF, JPG, JPEG, PNG, or WEBP.";
     }
 
     if (file.size > 5 * 1024 * 1024) {
-      setFileError("File is too large. Maximum size is 5MB.");
-      setPayslipFileName("");
+      return "File is too large. Maximum size is 5MB.";
+    }
+
+    return null;
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, field: "payslip" | "icFront" | "icBack") => {
+    const file = e.target.files?.[0];
+    const setFileName =
+      field === "payslip" ? setPayslipFileName : field === "icFront" ? setIcFrontFileName : setIcBackFileName;
+
+    if (!file) {
+      setFileName("");
+      setFileError("");
+      return;
+    }
+
+    const error = validateFile(file);
+    if (error) {
+      setFileError(error);
+      setFileName("");
       e.target.value = "";
       return;
     }
 
     setFileError("");
-    setPayslipFileName(file.name);
+    setFileName(file.name);
+  };
+
+  const handleRemoveFile = (field: "payslip" | "icFront" | "icBack") => {
+    if (field === "payslip") {
+      setPayslipFileName("");
+      if (payslipInputRef.current) payslipInputRef.current.value = "";
+    } else if (field === "icFront") {
+      setIcFrontFileName("");
+      if (icFrontInputRef.current) icFrontInputRef.current.value = "";
+    } else if (field === "icBack") {
+      setIcBackFileName("");
+      if (icBackInputRef.current) icBackInputRef.current.value = "";
+    }
+    setFileError("");
   };
 
   const resetForm = () => {
@@ -117,10 +143,12 @@ export default function RegistrationFormSection({
     setFormSubmitted(false);
     setFormData(initialFormData);
     setPayslipFileName("");
+    setIcFrontFileName("");
+    setIcBackFileName("");
     setFileError("");
-    if (payslipInputRef.current) {
-      payslipInputRef.current.value = "";
-    }
+    if (payslipInputRef.current) payslipInputRef.current.value = "";
+    if (icFrontInputRef.current) icFrontInputRef.current.value = "";
+    if (icBackInputRef.current) icBackInputRef.current.value = "";
   };
 
   const handleFormSubmit = (e: React.FormEvent) => {
@@ -131,6 +159,13 @@ export default function RegistrationFormSection({
         top: document.getElementById(sectionId)?.offsetTop ? document.getElementById(sectionId)!.offsetTop - 100 : 0,
         behavior: "smooth",
       });
+      return;
+    }
+
+    if (!icFrontInputRef.current?.files?.length || !icBackInputRef.current?.files?.length) {
+      e.preventDefault();
+      setFormLoading(false);
+      setFileError("Upload of IC/Passport (Front & Back) is required for registration.");
       return;
     }
 
@@ -386,13 +421,101 @@ export default function RegistrationFormSection({
                       <option value="12:00 P.M">12:00 P.M</option>
                       <option value="2:00 P.M">2:00 P.M</option>
                       <option value="4:00 P.M">4:00 P.M</option>
-                    </select>
+                      </select>
+                  </div>
+
+                  <div className="space-y-2 md:col-span-2 animate-in fade-in zoom-in-95 duration-300">
+                    <label className="text-sm font-bold text-zinc-700 ml-1">Copy of I/C or Passport (Front & Back)</label>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      {/* FRONT */}
+                      <div className={`relative border-2 border-dashed rounded-[2rem] p-6 text-center transition-all bg-zinc-50/50 group ${icFrontFileName ? "border-primary/50 bg-primary/5 shadow-inner" : "border-zinc-200 hover:border-primary/30"}`}>
+                        <input
+                          ref={icFrontInputRef}
+                          type="file"
+                          name="icFrontFile"
+                          className="sr-only"
+                          id="ic-front-upload"
+                          accept="image/*,.pdf"
+                          onChange={(e) => handleFileChange(e, "icFront")}
+                        />
+                        {icFrontFileName ? (
+                          <div className="space-y-2 animate-in zoom-in-95 duration-200">
+                            <div className="w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center mx-auto shadow-lg shadow-primary/20">
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
+                              </svg>
+                            </div>
+                            <p className="text-xs font-bold text-primary truncate px-2">{icFrontFileName}</p>
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveFile("icFront")}
+                              className="absolute -top-2 -right-2 w-7 h-7 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition-colors"
+                            >
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                            </button>
+                          </div>
+                        ) : (
+                          <label htmlFor="ic-front-upload" className="cursor-pointer space-y-2 block">
+                            <div className="w-10 h-10 bg-white rounded-xl border border-zinc-100 flex items-center justify-center mx-auto shadow-sm group-hover:scale-110 transition-transform">
+                              <svg className="w-5 h-5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+                              </svg>
+                            </div>
+                            <p className="text-xs font-bold text-zinc-600">Upload Front Side</p>
+                          </label>
+                        )}
+                      </div>
+
+                      {/* BACK */}
+                      <div className={`relative border-2 border-dashed rounded-[2rem] p-6 text-center transition-all bg-zinc-50/50 group ${icBackFileName ? "border-primary/50 bg-primary/5 shadow-inner" : "border-zinc-200 hover:border-primary/30"}`}>
+                        <input
+                          ref={icBackInputRef}
+                          type="file"
+                          name="icBackFile"
+                          className="sr-only"
+                          id="ic-back-upload"
+                          accept="image/*,.pdf"
+                          onChange={(e) => handleFileChange(e, "icBack")}
+                        />
+                        {icBackFileName ? (
+                          <div className="space-y-2 animate-in zoom-in-95 duration-200">
+                            <div className="w-10 h-10 bg-primary text-white rounded-xl flex items-center justify-center mx-auto shadow-lg shadow-primary/20">
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
+                              </svg>
+                            </div>
+                            <p className="text-xs font-bold text-primary truncate px-2">{icBackFileName}</p>
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveFile("icBack")}
+                              className="absolute -top-2 -right-2 w-7 h-7 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition-colors"
+                            >
+                              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                            </button>
+                          </div>
+                        ) : (
+                          <label htmlFor="ic-back-upload" className="cursor-pointer space-y-2 block">
+                            <div className="w-10 h-10 bg-white rounded-xl border border-zinc-100 flex items-center justify-center mx-auto shadow-sm group-hover:scale-110 transition-transform">
+                              <svg className="w-5 h-5 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+                              </svg>
+                            </div>
+                            <p className="text-xs font-bold text-zinc-600">Upload Back Side</p>
+                          </label>
+                        )}
+                      </div>
+                    </div>
+                    <p className="text-[10px] text-zinc-400 text-center mt-2 italic">*Required for verification</p>
                   </div>
 
                   {formData.isCivilServant === "Yes" && (
                     <div className="space-y-2 md:col-span-2 animate-in fade-in zoom-in-95 duration-300">
                       <label className="text-sm font-bold text-zinc-700 ml-1">Payslip Letterhead (Civil Servant)</label>
-                      <div className="border-2 border-dashed border-zinc-200 rounded-[2rem] p-8 text-center hover:border-primary/30 transition-colors bg-zinc-50/50 group">
+                      <div className={`relative border-2 border-dashed rounded-[2rem] p-8 text-center transition-all bg-zinc-50/50 group ${payslipFileName ? "border-primary/50 bg-primary/5 shadow-inner" : "border-zinc-200 hover:border-primary/30"}`}>
                         <input
                           ref={payslipInputRef}
                           type="file"
@@ -400,21 +523,42 @@ export default function RegistrationFormSection({
                           className="sr-only"
                           id="payslip-upload"
                           accept="image/*,.pdf"
-                          onChange={handlePayslipChange}
+                          onChange={(e) => handleFileChange(e, "payslip")}
                         />
-                        <label htmlFor="payslip-upload" className="cursor-pointer space-y-3 block">
-                          <div className="w-12 h-12 bg-white rounded-2xl border border-zinc-100 flex items-center justify-center mx-auto shadow-sm group-hover:scale-110 transition-transform">
-                            <svg className="w-6 h-6 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
-                            </svg>
+                        {payslipFileName ? (
+                          <div className="space-y-3 animate-in zoom-in-95 duration-200">
+                            <div className="w-12 h-12 bg-primary text-white rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-primary/20">
+                              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
+                              </svg>
+                            </div>
+                            <p className="text-sm font-bold text-primary">{payslipFileName}</p>
+                            <p className="text-xs text-zinc-400">File uploaded successfully.</p>
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveFile("payslip")}
+                              className="absolute -top-3 -right-3 w-9 h-9 bg-red-500 text-white rounded-full flex items-center justify-center shadow-lg hover:bg-red-600 transition-colors"
+                            >
+                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M6 18L18 6M6 6l12 12" />
+                              </svg>
+                            </button>
                           </div>
-                          <p className="text-sm font-bold text-zinc-600">{payslipFileName || "Insert Your Files Here"}</p>
-                          <p className="text-xs text-zinc-400">Please provide only the letterhead section of the payslip.</p>
-                        </label>
+                        ) : (
+                          <label htmlFor="payslip-upload" className="cursor-pointer space-y-3 block">
+                            <div className="w-12 h-12 bg-white rounded-2xl border border-zinc-100 flex items-center justify-center mx-auto shadow-sm group-hover:scale-110 transition-transform">
+                              <svg className="w-6 h-6 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4v16m8-8H4" />
+                              </svg>
+                            </div>
+                            <p className="text-sm font-bold text-zinc-600">Insert Your Files Here</p>
+                            <p className="text-xs text-zinc-400">Please provide only the letterhead section of the payslip.</p>
+                          </label>
+                        )}
                       </div>
-                      {fileError && <p className="text-sm text-red-600 font-semibold">{fileError}</p>}
                     </div>
                   )}
+                  {fileError && <p className="text-sm text-red-600 font-semibold md:col-span-2 text-center">{fileError}</p>}
                 </div>
               )}
 
