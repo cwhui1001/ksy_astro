@@ -400,7 +400,7 @@ const PackageDetailModal: React.FC<PackageDetailModalProps> = ({ isOpen, onClose
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4 md:p-10" onClick={onClose}>
       <div 
-        className="relative flex h-full w-full max-w-7xl overflow-hidden bg-white rounded-2xl shadow-2xl animate-modal-content"
+        className="relative flex flex-col md:flex-row h-full w-full max-w-7xl overflow-hidden bg-white rounded-2xl shadow-2xl animate-modal-content"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
@@ -447,9 +447,8 @@ const PackageDetailModal: React.FC<PackageDetailModalProps> = ({ isOpen, onClose
           </div>
         </aside>
 
-        {/* Main Content Area */}
-        <div className="flex-1 flex flex-col overflow-hidden bg-zinc-50">
-          <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 flex flex-col min-h-0 overflow-hidden bg-zinc-50">
+          <div className="flex-1 overflow-y-auto min-h-0 overscroll-contain">
             {channelView ? (
                <div className="p-6 md:p-12 animate-in fade-in slide-in-from-right-4 duration-500">
                   {/* Back Button */}
@@ -519,9 +518,9 @@ const PackageDetailModal: React.FC<PackageDetailModalProps> = ({ isOpen, onClose
                 />
 
                 {/* Content Wrapper */}
-                <div className="px-6 md:px-12 pb-12">
+                <div className="px-6 md:px-12 pb-12 pt-6 md:pt-0">
                   {/* Pack Summary Card */}
-                  <div className="relative -mt-32 md:-mt-24 mb-10 flex flex-col md:flex-row gap-6 bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-zinc-100">
+                  <div className="relative mt-6 md:-mt-24 mb-10 flex flex-col md:flex-row gap-6 bg-white p-6 md:p-8 rounded-3xl shadow-xl border border-zinc-100">
                     <div className="flex-grow space-y-4">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 md:w-12 md:h-12 relative shrink-0">
@@ -532,13 +531,13 @@ const PackageDetailModal: React.FC<PackageDetailModalProps> = ({ isOpen, onClose
                       <p className="text-zinc-600 font-medium leading-relaxed max-w-lg">
                         {currentPack.description}
                       </p>
-                      <div className="pt-4 flex items-baseline gap-2">
-                        <div>
-                          <span className="text-3xl font-black text-zinc-900">RM{currentPack.price}</span>
-                          <span className="text-lg font-bold text-zinc-400">/mth</span>
+                      <div className="pt-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-2xl md:text-3xl font-black text-zinc-900">RM{currentPack.price}</span>
+                          <span className="text-base md:text-lg font-bold text-zinc-400">/mth</span>
                         </div>
                         {currentPack.originalPrice && (
-                          <span className="text-lg font-bold text-zinc-400 line-through">RM{currentPack.originalPrice}</span>
+                          <span className="text-sm md:text-lg font-bold text-zinc-400 line-through">RM{currentPack.originalPrice}</span>
                         )}
                       </div>
                     </div>

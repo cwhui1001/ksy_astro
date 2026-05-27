@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { triggerConversion } from "@/lib/gtag";
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -60,6 +61,7 @@ const Navbar = () => {
             ))}
             <Link
               href="/apply-now"
+              onClick={() => triggerConversion()}
               className="inline-flex items-center justify-center px-8 py-3 rounded-2xl bg-primary text-white font-black text-sm uppercase tracking-wider transition-all hover:bg-primary/90 hover:shadow-[0_0_30px_rgba(255,0,144,0.4)] hover:-translate-y-0.5 active:translate-y-0"
             >
               Apply Now
@@ -112,7 +114,10 @@ const Navbar = () => {
 
           <Link
             href="/apply-now"
-            onClick={() => setIsOpen(false)}
+            onClick={() => {
+              setIsOpen(false);
+              triggerConversion();
+            }}
             className="flex items-center justify-center w-full py-5 rounded-[2rem] bg-primary text-white font-black text-xl uppercase tracking-widest shadow-2xl shadow-primary/20 active:scale-95 transition-transform"
           >
             Apply Now

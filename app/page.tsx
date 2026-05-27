@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import * as gtag from "@/lib/gtag";
 import PackCarousel from "@/components/PackCarousel";
 import ChannelModal from "@/components/ChannelModal";
 import PackageDetailModal from "@/components/PackageDetailModal";
@@ -316,6 +317,7 @@ export default function Home() {
               <div className="pt-1 flex flex-col sm:flex-row items-center gap-8">
                 <button
                   onClick={() => {
+                    gtag.triggerConversion();
                     setRegistrationPreset({
                       isCivilServant: "Yes", 
                       package: "Astro One ENTERTAINMENT PACK + Civil Servant Rebate",
@@ -395,39 +397,40 @@ export default function Home() {
                   </p>
                 </div>
                 
-                <div className="lg:col-span-5 flex flex-col rounded-[2rem] bg-white/70 p-6 backdrop-blur-[30px] lg:p-8 shadow-2xl border border-white/20 transition-transform duration-700 group-hover:scale-105">
-                  <div className="mb-4 flex justify-between gap-4">
-                    <p className="text-2xl font-black text-zinc-900">Entertainment + Netflix</p>
-                    <div className="text-right font-black text-zinc-900">
+                <div className="lg:col-span-5 flex flex-col rounded-[2rem] bg-white/70 p-5 backdrop-blur-[30px] lg:p-8 shadow-2xl border border-white/20 transition-transform duration-700 group-hover:scale-105">
+                  <div className="mb-4 flex flex-col sm:flex-row justify-between gap-2 sm:gap-4">
+                    <p className="text-xl md:text-2xl font-black text-zinc-900">Entertainment + Netflix</p>
+                    <div className="text-left sm:text-right font-black text-zinc-900 transition-transform">
                       <p><span className="text-3xl">RM74.90</span><span className="text-sm">/mth</span></p>
                     </div>
                   </div>
                   
-                  <div className="flex w-full flex-row items-center gap-2 mb-8">
+                  <div className="flex w-full flex-col sm:flex-row sm:items-center gap-4 mb-8">
                     <div className="flex-grow">
-                      <span className="flex w-fit items-center gap-2 rounded-sm border border-emerald-200/50 bg-linear-to-r from-[#FFF9D3] to-[#C3F2D7] px-3 py-1 font-black text-[10px] text-[#01BF55] uppercase tracking-widest">
+                      <span className="flex w-fit items-center gap-2 rounded-sm border border-emerald-200/50 bg-linear-to-r from-[#FFF9D3] to-[#C3F2D7] px-3 py-1.5 font-black text-[10px] text-[#01BF55] uppercase tracking-widest">
                         <Image alt="badge-icon" width={16} height={16} src="/images/green_coin.svg" className="min-w-[16px]" />
                         Best Value
                       </span>
                     </div>
                     <button 
                       onClick={() => {
+                        gtag.triggerConversion();
                         setRegistrationPreset({ package: "Astro One Entertainment + Netflix" });
                         document.getElementById('registration-section')?.scrollIntoView({ behavior: 'smooth' });
                       }}
-                      className="cursor-pointer bg-linear-to-r from-primary to-purple-600 text-white px-8 py-3 rounded-xl font-black text-sm hover:scale-105 transition-all shadow-lg active:scale-95"
+                      className="w-full sm:w-auto cursor-pointer bg-linear-to-r from-primary to-purple-600 text-white px-8 py-4 sm:py-3 rounded-xl font-black text-sm hover:scale-105 transition-all shadow-lg active:scale-95"
                     >
                       Get it now
                     </button>
                   </div>
                   
-                  <ul className="mb-8 space-y-4 h-[112px]">
+                  <ul className="mb-8 space-y-4">
                     {[
                       "Andai Tiada Dia, Gegar Vaganza, MFL, Didi & Friends",
                       "Popular series, blockbusters, award-winning TV shows, family favourites",
                       "Stream on up to 2 devices"
                     ].map((feature, i) => (
-                      <li key={i} className="flex flex-row gap-3 text-sm text-zinc-900 font-bold">
+                      <li key={i} className="flex flex-row gap-3 text-sm text-zinc-900 font-bold leading-tight">
                         <Image alt="info-icon" width={14} height={14} src="/images/tick.svg" className="mt-1 flex-none self-start" />
                         <p>{feature}</p>
                       </li>
@@ -435,7 +438,7 @@ export default function Home() {
                   </ul>
 
                   <div className="mt-auto">
-                    <div className="flex items-center gap-3 mb-4">
+                    <div className="flex flex-wrap items-center gap-3 mb-4">
                       <button className="px-4 py-1.5 rounded-lg border border-zinc-200 bg-white/60 text-xs font-black text-zinc-900">Base</button>
                       <button 
                         onClick={() => openDetailModal("entertainment")}
@@ -444,7 +447,7 @@ export default function Home() {
                         View more
                       </button>
                     </div>
-                    <div className="grid grid-cols-3 gap-2 h-[85px]">
+                    <div className="grid grid-cols-3 gap-2 h-20 md:h-[85px]">
                        <Image alt="big_stage" width={150} height={84} src="/images/big-stage-concert.jpg" className="w-full h-full rounded-xl aspect-video object-cover" />
                        <Image alt="Fight for Beauty" width={150} height={84} src="/images/fight-for-beauty.jpg" className="w-full h-full rounded-xl aspect-video object-cover" />
                        <Image alt="mfl" width={150} height={84} src="/images/mfl_1.jpg" className="w-full h-full rounded-xl aspect-video object-cover" />
@@ -472,40 +475,41 @@ export default function Home() {
                   </p>
                 </div>
                 
-                <div className="lg:col-span-5 flex flex-col rounded-[2rem] bg-white/70 p-6 backdrop-blur-[30px] lg:p-8 shadow-2xl border border-white/20 transition-transform duration-700 group-hover:scale-105">
-                  <div className="mb-4 flex justify-between gap-4">
-                    <p className="text-2xl font-black text-zinc-900">Sports + Netflix</p>
-                    <div className="text-right font-black text-zinc-900">
+                <div className="lg:col-span-5 flex flex-col rounded-[2rem] bg-white/70 p-5 backdrop-blur-[30px] lg:p-8 shadow-2xl border border-white/20 transition-transform duration-700 group-hover:scale-105">
+                  <div className="mb-4 flex flex-col sm:flex-row justify-between gap-2 sm:gap-4">
+                    <p className="text-xl md:text-2xl font-black text-zinc-900">Sports + Netflix</p>
+                    <div className="text-left sm:text-right font-black text-zinc-900 transition-transform">
                       <p><span className="text-3xl">RM94.90</span><span className="text-sm">/mth</span></p>
                       <s className="text-sm text-zinc-500 font-bold">RM124.90/mth</s>
                     </div>
                   </div>
                   
-                  <div className="flex w-full flex-row items-center gap-2 mb-8">
+                  <div className="flex w-full flex-col sm:flex-row sm:items-center gap-4 mb-8">
                     <div className="flex-grow">
-                      <span className="flex w-fit items-center gap-2 rounded-sm border border-pink-200/50 bg-linear-to-r from-[#FDCFE8] to-[#D1E3FF] px-3 py-1 font-black text-[10px] text-[#442AD7] uppercase tracking-widest">
+                      <span className="flex w-fit items-center gap-2 rounded-sm border border-pink-200/50 bg-linear-to-r from-[#FDCFE8] to-[#D1E3FF] px-3 py-1.5 font-black text-[10px] text-[#442AD7] uppercase tracking-widest">
                         <Image alt="badge-icon" width={16} height={16} src="/images/favourite.png" className="min-w-[16px]" />
                         Popular Choice
                       </span>
                     </div>
                     <button 
                       onClick={() => {
+                        gtag.triggerConversion();
                         setRegistrationPreset({ package: "Astro One Sports + Netflix" });
                         document.getElementById('registration-section')?.scrollIntoView({ behavior: 'smooth' });
                       }}
-                      className="cursor-pointer bg-linear-to-r from-primary to-blue-600 text-white px-8 py-3 rounded-xl font-black text-sm hover:scale-105 transition-all shadow-lg active:scale-95"
+                      className="w-full sm:w-auto cursor-pointer bg-linear-to-r from-primary to-blue-600 text-white px-8 py-4 sm:py-3 rounded-xl font-black text-sm hover:scale-105 transition-all shadow-lg active:scale-95"
                     >
                       Get it now
                     </button>
                   </div>
                   
-                  <ul className="mb-8 space-y-4 h-[112px]">
+                  <ul className="mb-8 space-y-4">
                     {[
                       "Premier League, BWF, UFC, NBA, Formula 1, MotoGP, and more",
                       "Stream endless live sports",
                       "Stream on up to 2 devices"
                     ].map((feature, i) => (
-                      <li key={i} className="flex flex-row gap-3 text-sm text-zinc-900 font-bold">
+                      <li key={i} className="flex flex-row gap-3 text-sm text-zinc-900 font-bold leading-tight">
                         <Image alt="info-icon" width={14} height={14} src="/images/tick.svg" className="mt-1 flex-none self-start" />
                         <p>{feature}</p>
                       </li>
@@ -513,12 +517,12 @@ export default function Home() {
                   </ul>
 
                   <div className="mt-auto">
-                    <div className="flex flex-wrap items-center gap-1 mb-4">
+                    <div className="flex flex-wrap items-center gap-1.5 mb-4">
                       {["Sports", "Sports Extra", "Base"].map((tab) => (
                         <button
                           key={tab}
                           onClick={() => setSportsSubTab(tab)}
-                          className={`px-4 py-2 rounded-lg text-xs font-black transition-all cursor-pointer ${
+                          className={`px-3 py-1.5 rounded-lg text-xs font-black transition-all cursor-pointer ${
                             sportsSubTab === tab 
                               ? "bg-white/90 border border-zinc-200 text-zinc-900 shadow-sm" 
                               : "text-primary hover:text-primary/70"
@@ -529,12 +533,12 @@ export default function Home() {
                       ))}
                       <button 
                         onClick={() => openDetailModal("sports")}
-                        className="px-4 py-2 text-xs font-black text-primary hover:underline cursor-pointer"
+                        className="px-2 py-1.5 text-xs font-black text-primary hover:underline cursor-pointer"
                       >
                         View more
                       </button>
                     </div>
-                    <div className="grid grid-cols-3 gap-2 h-[85px]">
+                    <div className="grid grid-cols-3 gap-2 h-20 md:h-[85px]">
                       {sportsSubTab === "Sports" && (
                         <>
                           <Image alt="bwf" width={150} height={84} src="/images/bwf-badminton.jpg" className="w-full h-full rounded-xl aspect-video object-cover animate-in fade-in duration-500" />
@@ -685,6 +689,7 @@ export default function Home() {
                 <div className="flex flex-col gap-3 md:gap-4 pt-2">
                   <button
                     onClick={() => {
+                      gtag.triggerConversion();
                       setRegistrationPreset({
                         package: pack.name.includes("EPIC") ? "Astro One EPIC PACK" : pack.name.includes("SPORTS") ? "Astro One SPORTS PACK" : "Astro One ENTERTAINMENT PACK",
                       });
