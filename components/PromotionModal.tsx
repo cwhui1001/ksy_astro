@@ -1,25 +1,35 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { triggerConversion } from "@/lib/gtag";
 
 const PromotionModal = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
+    // Only show on the homepage
+    if (pathname !== "/") return;
+
+    // Optional: Only show once per session
+    const hasBeenShown = sessionStorage.getItem("promotion_modal_shown");
+    if (hasBeenShown) return;
+
     // Show modal after a short delay when landing on the site
     const timer = setTimeout(() => {
       setIsOpen(true);
+      sessionStorage.setItem("promotion_modal_shown", "true");
     }, 500);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [pathname]);
 
   const closeModal = () => {
     setIsOpen(false);
   };
 
-  if (!isOpen) return null;
+  if (!isOpen || pathname !== "/") return null;
 
   const WHATSAPP_NUMBER = "60179978841";
   const MESSAGE = "Hi Astro, I am interested in the latest promotion and info!";
