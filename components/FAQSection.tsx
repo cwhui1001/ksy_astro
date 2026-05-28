@@ -13,7 +13,7 @@ const faqs = [
       <>
         Simply fill out the form will do. We will contact you to verify your details and process your application. Prefer to talk to us directly? You can contact us on{" "}
         <a 
-          href="https://api.whatsapp.com/send?phone=60146833321&text=Hi%20Astro%2C%20I%20would%20like%20to%20know%20more%20about%20Astro%20One%20Packages" 
+          href="https://api.whatsapp.com/send?phone=60179978841&text=Hi%20Astro%2C%20I%20would%20like%20to%20know%20more%20about%20Astro%20One%20Packages" 
           target="_blank" 
           rel="noopener noreferrer"
           className="text-primary font-bold hover:underline"

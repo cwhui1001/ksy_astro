@@ -3,7 +3,7 @@
 import React from "react";
 
 const WhatsAppFloatingBtn = () => {
-  const WHATSAPP_NUMBER = "60146833321";
+  const WHATSAPP_NUMBER = "60179978841";
   const MESSAGE = "Hi Astro, I would like to know more about the Astro One Packages.";
   const waLink = `https://api.whatsapp.com/send?phone=${WHATSAPP_NUMBER}&text=${encodeURIComponent(MESSAGE)}`;
 

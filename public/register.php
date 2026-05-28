@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 const ADMIN_EMAIL = 'admin@astro-registration.my';
-const WHATSAPP_NUMBER = '60146833321';
+const WHATSAPP_NUMBER = '60179978841';
 const MAX_UPLOAD_SIZE = 5242880; // 5MB
 
 function clean_input(string $value): string

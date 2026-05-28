@@ -65,9 +65,9 @@ const Footer = () => {
             <h3 className="text-lg font-semibold tracking-wide text-white uppercase opacity-90">Contact</h3>
             <ul className="space-y-4 text-center md:text-left">
               <li>
-                <a href="tel:+60146833321" className="group block">
+                <a href="tel:+60179978841" className="group block">
                   <span className="text-white/50 group-hover:text-primary transition-colors text-sm">
-                    +6014-6833321 
+                    +6017-9978841 
                   </span>
                   <span className="block text-xs text-white/30">(Registration)</span>
                 </a>

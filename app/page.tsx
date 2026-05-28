@@ -31,7 +31,7 @@ interface Pack {
 }
 
 export default function Home() {
-  const WHATSAPP_NUMBER = "60146833321";
+  const WHATSAPP_NUMBER = "60179978841";
   const [modalState, setModalState] = useState({
     isOpen: false,
     imageSrc: "",
