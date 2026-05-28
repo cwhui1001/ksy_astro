@@ -5,6 +5,7 @@ import Script from "next/script";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import WhatsAppFloatingBtn from "@/components/WhatsAppFloatingBtn";
+import PromotionModal from "@/components/PromotionModal";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,6 +41,7 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground selection:bg-primary selection:text-white">
+        <PromotionModal />
         <Script
           async
           src="https://www.googletagmanager.com/gtag/js?id=AW-18063176278"

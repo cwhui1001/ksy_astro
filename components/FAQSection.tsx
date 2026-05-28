@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { triggerConversion } from "@/lib/gtag";
 
 const faqs = [
   {
@@ -16,6 +17,7 @@ const faqs = [
           href="https://api.whatsapp.com/send?phone=60179978841&text=Hi%20Astro%2C%20I%20would%20like%20to%20know%20more%20about%20Astro%20One%20Packages" 
           target="_blank" 
           rel="noopener noreferrer"
+          onClick={() => triggerConversion()}
           className="text-primary font-bold hover:underline"
         >
           WhatsApp

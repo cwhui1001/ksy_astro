@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { triggerConversion } from "@/lib/gtag";
 
 const WhatsAppFloatingBtn = () => {
   const WHATSAPP_NUMBER = "60179978841";
@@ -27,6 +28,7 @@ const WhatsAppFloatingBtn = () => {
         href={waLink}
         target="_blank"
         rel="noopener noreferrer"
+        onClick={() => triggerConversion()}
         className="relative flex items-center justify-center w-14 h-14 md:w-16 md:h-16 bg-[#25D366] rounded-full shadow-2xl transition-all duration-300 transform group-hover:scale-110 group-active:scale-95 group-hover:rotate-12"
         aria-label="Chat on WhatsApp"
       >
