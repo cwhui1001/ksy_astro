@@ -42,7 +42,7 @@ export default function Home() {
     packId: "entertainment",
   });
   const [openFaq, setOpenFaq] = useState<number | null>(0);
-  const [activeTab, setActiveTab] = useState("netflix");
+  const [activeTab, setActiveTab] = useState("standard");
   const [sportsSubTab, setSportsSubTab] = useState("Sports");
   const [registrationPreset, setRegistrationPreset] = useState<Record<string, string>>({});
 
@@ -352,17 +352,6 @@ export default function Home() {
             
             <div className="flex gap-8 md:gap-16 border-b border-zinc-200 w-full justify-center">
               <button
-                onClick={() => setActiveTab("netflix")}
-                className={`pb-4 text-xl md:text-2xl font-bold transition-all relative cursor-pointer ${
-                  activeTab === "netflix" ? "text-primary" : "text-zinc-400 hover:text-zinc-600"
-                }`}
-              >
-                Bundle with Netflix
-                {activeTab === "netflix" && (
-                  <div className="absolute bottom-[-1px] left-0 w-full h-[3px] bg-primary rounded-t-full" />
-                )}
-              </button>
-              <button
                 onClick={() => setActiveTab("standard")}
                 className={`pb-4 text-xl md:text-2xl font-bold transition-all relative cursor-pointer ${
                   activeTab === "standard" ? "text-primary" : "text-zinc-400 hover:text-zinc-600"
@@ -370,6 +359,17 @@ export default function Home() {
               >
                 TV Packs Only
                 {activeTab === "standard" && (
+                  <div className="absolute bottom-[-1px] left-0 w-full h-[3px] bg-primary rounded-t-full" />
+                )}
+              </button>
+              <button
+                onClick={() => setActiveTab("netflix")}
+                className={`pb-4 text-xl md:text-2xl font-bold transition-all relative cursor-pointer ${
+                  activeTab === "netflix" ? "text-primary" : "text-zinc-400 hover:text-zinc-600"
+                }`}
+              >
+                Bundle with Netflix
+                {activeTab === "netflix" && (
                   <div className="absolute bottom-[-1px] left-0 w-full h-[3px] bg-primary rounded-t-full" />
                 )}
               </button>

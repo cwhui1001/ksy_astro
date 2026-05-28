@@ -8,6 +8,7 @@ type RegistrationFormData = {
   accountNumber: string;
   package: string;
   isCivilServant: string;
+  staffId: string;
   installationMethod: string;
   fullName: string;
   icNumber: string;
@@ -31,6 +32,7 @@ const initialFormData: RegistrationFormData = {
   accountNumber: "",
   package: "",
   isCivilServant: "",
+  staffId: "",
   installationMethod: "",
   fullName: "",
   icNumber: "",
@@ -77,6 +79,7 @@ export default function RegistrationFormSection({
     setFormData((prev) => ({ ...prev, [name]: value }));
 
     if (name === "isCivilServant" && value !== "Yes") {
+      setFormData((prev) => ({ ...prev, staffId: "" }));
       setFileError("");
       setPayslipFileName("");
       if (payslipInputRef.current) {
@@ -284,6 +287,21 @@ export default function RegistrationFormSection({
                       <option value="Yes">Yes</option>
                     </select>
                   </div>
+
+                  {formData.isCivilServant === "Yes" && (
+                    <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
+                      <label className="text-sm font-bold text-zinc-700 ml-1">Staff ID</label>
+                      <input
+                        type="text"
+                        name="staffId"
+                        placeholder="Enter your staff ID"
+                        value={formData.staffId}
+                        onChange={handleInputChange}
+                        className="w-full p-4 rounded-2xl bg-zinc-50 border border-zinc-200 focus:border-primary focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-zinc-900"
+                        required
+                      />
+                    </div>
+                  )}
 
                   <div className="space-y-2 md:col-span-2">
                     <label className="text-sm font-bold text-zinc-700 ml-1">Installation Method</label>
