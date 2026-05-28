@@ -10,7 +10,7 @@ const PromotionModal = () => {
     // Show modal after a short delay when landing on the site
     const timer = setTimeout(() => {
       setIsOpen(true);
-    }, 1500);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, []);
